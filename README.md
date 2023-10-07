@@ -1,2 +1,2 @@
 # powershell
-Powershell Scripts
+Assorted PowerShell functions and scripts
