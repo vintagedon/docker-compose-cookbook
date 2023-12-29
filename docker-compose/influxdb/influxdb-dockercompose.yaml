@@ -1,1 +1,14 @@
-
+# InfluxDB - Database for sensor data
+influxdb:
+  image: influxdb:latest
+  container_name: influxdb
+  networks:
+    - default
+  security_opt:
+    - no-new-privileges:true
+  restart: unless-stopped
+  ports:
+    - "8086:8086"
+  volumes:
+    - $DOCKERDIR/appdata/influxdb2/config:/etc/influxdb2
+    - $DOCKERDIR/appdata/influxdb2/db:/var/lib/influxdb2
