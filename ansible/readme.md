@@ -5,7 +5,7 @@ Ansible playbooks, roles, and other building blocks.
 All playbooks based off of the default/recommended directory layout from the Ansible documentation.
 Link: https://docs.ansible.com/ansible/latest/user_guide/playbooks_best_practices.html#directory-layout
 
-Directory structure can be created with the init optioin via ansible-galaxy
+Directory structure can be created with the init option via ansible-galaxy
 
 ```
 $ ansible-galaxy init --init-path=<path-to-roles-directory> <name-of-role>
