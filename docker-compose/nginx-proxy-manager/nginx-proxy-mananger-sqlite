@@ -1,3 +1,13 @@
+# Name: nginx-proxy-mananger-sqlite.yaml
+#
+# Description:
+# Docker compose file
+# Ngnix Proxy Manager w/SQLLite
+# https://nginxproxymanager.com/
+#
+# Project: https://github.com/vintagedon/infrastructure-scripting/blob/main/docker-compose/
+# License: Apache-2.0
+
 version: '3'
 services:
   app:
@@ -5,9 +15,9 @@ services:
     restart: unless-stopped
     ports:
       # These ports are in format <host-port>:<container-port>
-      - '80:80' # Public HTTP Port
-      - '443:443' # Public HTTPS Port
-      - '81:81' # Admin Web Port
+      - '${PUBLIC_HTTP_PORT}:80'
+      - '${PUBLIC_HTTPS_PORT}:443'
+      - '${NPM_ADMIN_PORT}:81'
     volumes:
-      - /portdata/nginx-proxy-manager/data:/data
-      - /portdata/nginx-proxy-manager/letsencrypt:/etc/letsencrypt
+      - ${DATA_DIR}/data:/data
+      - ${LETSENCRYPT_DIR}/letsencrypt:/etc/letsencrypt
