@@ -1,6 +1,6 @@
-# Nginx Proxy Manager Docker Compose File
+# Nginx Proxy Manager w/SQLite
 
-This Docker Compose provides a basic working Ngnix proxy manager using sqllite
+This Docker Compose provides a basic working Ngnix proxy manager using sqllite.
 
 # Project Structure
 
