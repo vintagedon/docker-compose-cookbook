@@ -32,15 +32,16 @@ $ ansible-galaxy init rolename
 The output is a directory structure like so:
 
 ```
-<rolename>/
-    .travis.yml
-    README.md
-    defaults/
-    files/
-    handlers/
-    meta/
-    tasks/
-    templates/
-    tests/
-    vars/
+
+ roles
+ └── x
+     ├── defaults
+     ├── files
+     ├── handlers
+     ├── meta
+     ├── tasks
+     ├── templates
+     ├── tests
+     │    └── inventory
+     └── vars
 ```
