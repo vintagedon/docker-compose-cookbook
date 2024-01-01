@@ -1,0 +1,23 @@
+galaxy_info:
+  author: Don Fountain
+  description: Upgrade apt-compatible Linux server and reboot if necessary.
+
+  license: GPLv3
+
+  min_ansible_version: 2.0
+
+  platforms:
+  - name: Ubuntu
+    versions:
+    - all
+  - name: Debian
+    versions:
+    - all
+
+  galaxy_tags:
+  - development
+  - system
+  - ubuntu
+  - debian
+  - packages
+  - upgrade
