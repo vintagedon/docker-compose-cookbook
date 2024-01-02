@@ -24,3 +24,9 @@ Re-usable Ansible roles that can be used either standalone or as building blocks
 | Ansible Role | Description | Repository | 
 | :---------------------------- | :---------------------------------- | :----------: |
 | ansible-role-linux-update-apt | Upgrade via apt & reboot if necessary | [REPO](https://github.com/vintagedon/infrastructure-scripting/tree/main/ansible/roles) |
+
+## Support Me
+
+If you find this useful, you can always buy me a cup of coffee!  
+  
+[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
