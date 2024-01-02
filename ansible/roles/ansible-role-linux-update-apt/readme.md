@@ -35,8 +35,3 @@ None.
     - { role: linux-server-apt.system-upgrade }
 ```
 
-## Support Me
-
-If you find this useful, you can always buy me a cup of coffee!  
-  
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
