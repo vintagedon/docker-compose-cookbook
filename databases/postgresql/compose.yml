@@ -1,6 +1,6 @@
 # Docker Compose file for PostgreSQL
 # GitHub: https://github.com/vintagedon/docker-compose-cookbook
-# Description: This Docker Compose file sets up a PostgreSQL instance with customizable configuration.
+# Description: This Docker Compose file sets up a PostgreSQL instance with expanded customizable configuration.
 
 version: '3.8'
 services:
@@ -12,11 +12,56 @@ services:
       - POSTGRES_DB=${POSTGRES_DB}
       - POSTGRES_USER=${POSTGRES_USER}
       - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      # Basic PostgreSQL configuration
+      - POSTGRES_MAX_CONNECTIONS=${POSTGRES_MAX_CONNECTIONS:-100}
+      - POSTGRES_SHARED_BUFFERS=${POSTGRES_SHARED_BUFFERS:-128MB}
+      - POSTGRES_WORK_MEM=${POSTGRES_WORK_MEM:-4MB}
+      - POSTGRES_MAINTENANCE_WORK_MEM=${POSTGRES_MAINTENANCE_WORK_MEM:-64MB}
+      # SSL configuration
+      - POSTGRES_SSL=${POSTGRES_SSL:-off}
+      - POSTGRES_SSL_CERT_FILE=${POSTGRES_SSL_CERT_FILE:-/etc/postgresql/server.crt}
+      - POSTGRES_SSL_KEY_FILE=${POSTGRES_SSL_KEY_FILE:-/etc/postgresql/server.key}
+      # Authentication and security
+      - POSTGRES_HOST_AUTH_METHOD=${POSTGRES_HOST_AUTH_METHOD:-md5}
+      # Autovacuum settings
+      - POSTGRES_AUTOVACUUM=${POSTGRES_AUTOVACUUM:-on}
+      # Logging
+      - POSTGRES_LOG_MIN_MESSAGES=${POSTGRES_LOG_MIN_MESSAGES:-WARNING}
+      # Query optimization
+      - POSTGRES_PREPARED_STATEMENTS=${POSTGRES_PREPARED_STATEMENTS:-on}
+      - POSTGRES_MAX_PREPARED_TRANSACTIONS=${POSTGRES_MAX_PREPARED_TRANSACTIONS:-0}
+      # Time zone
+      - POSTGRES_TIMEZONE=${POSTGRES_TIMEZONE:-UTC}
+      # Parallel query execution
+      - POSTGRES_MAX_PARALLEL_WORKERS_PER_GATHER=${POSTGRES_MAX_PARALLEL_WORKERS_PER_GATHER:-2}
+      # WAL and checkpointing
+      - POSTGRES_MAX_WAL_SIZE=${POSTGRES_MAX_WAL_SIZE:-1GB}
+      - POSTGRES_CHECKPOINT_COMPLETION_TARGET=${POSTGRES_CHECKPOINT_COMPLETION_TARGET:-0.9}
+      # Table partitioning
+      - POSTGRES_ENABLE_PARTITIONWISE_JOIN=${POSTGRES_ENABLE_PARTITIONWISE_JOIN:-off}
+      - POSTGRES_ENABLE_PARTITIONWISE_AGGREGATE=${POSTGRES_ENABLE_PARTITIONWISE_AGGREGATE:-off}
     ports:
       - "${POSTGRES_PORT}:5432"
     volumes:
       - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
       - ${POSTGRES_CONFIG_DIR}:/etc/postgresql
+    command: >
+      postgres
+      -c max_connections=${POSTGRES_MAX_CONNECTIONS:-100}
+      -c shared_buffers=${POSTGRES_SHARED_BUFFERS:-128MB}
+      -c work_mem=${POSTGRES_WORK_MEM:-4MB}
+      -c maintenance_work_mem=${POSTGRES_MAINTENANCE_WORK_MEM:-64MB}
+      -c ssl=${POSTGRES_SSL:-off}
+      -c ssl_cert_file=${POSTGRES_SSL_CERT_FILE:-/etc/postgresql/server.crt}
+      -c ssl_key_file=${POSTGRES_SSL_KEY_FILE:-/etc/postgresql/server.key}
+      -c log_min_messages=${POSTGRES_LOG_MIN_MESSAGES:-WARNING}
+      -c max_prepared_transactions=${POSTGRES_MAX_PREPARED_TRANSACTIONS:-0}
+      -c timezone=${POSTGRES_TIMEZONE:-UTC}
+      -c max_parallel_workers_per_gather=${POSTGRES_MAX_PARALLEL_WORKERS_PER_GATHER:-2}
+      -c max_wal_size=${POSTGRES_MAX_WAL_SIZE:-1GB}
+      -c checkpoint_completion_target=${POSTGRES_CHECKPOINT_COMPLETION_TARGET:-0.9}
+      -c enable_partitionwise_join=${POSTGRES_ENABLE_PARTITIONWISE_JOIN:-off}
+      -c enable_partitionwise_aggregate=${POSTGRES_ENABLE_PARTITIONWISE_AGGREGATE:-off}
     networks:
       - postgres_network
 
