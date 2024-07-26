@@ -2,6 +2,8 @@
 
 This project contains a Docker Compose file and environment configuration for setting up a standalone MySQL instance in a Docker container.
 
+One of the most widely used open-source relational database management systems (RDBMS) in the world is MySQL. A fundamental part of the LAMP (Linux, Apache, MySQL, PHP/Python/Perl) technological stack, MySQL is renowned for its dependability, speed, and user-friendliness. Web applications, content management systems, e-commerce platforms, and enterprise-level solutions all make extensive use of it.
+
 ## Author
 vintagedon
 
