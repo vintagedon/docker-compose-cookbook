@@ -1,0 +1,27 @@
+# Docker Compose file for MySQL
+# Author: vintagedon
+# GitHub: https://github.com/vintagedon/infrastructure-scripting/blob/main/docker-compose/
+# Description: This Docker Compose file sets up a MySQL instance with customizable configuration.
+
+version: '3.8'
+services:
+  mysql:
+    image: mysql:latest
+    container_name: ${MYSQL_CONTAINER_NAME}
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    ports:
+      - "${MYSQL_PORT}:3306"
+    volumes:
+      - ${MYSQL_DATA_DIR}:/var/lib/mysql
+      - ${MYSQL_CONFIG_DIR}:/etc/mysql/conf.d
+    networks:
+      - mysql_network
+
+networks:
+  mysql_network:
+    driver: bridge
