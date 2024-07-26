@@ -1,0 +1,26 @@
+# Docker Compose file for MariaDB
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook
+# Description: This Docker Compose file sets up a MariaDB instance with customizable configuration.
+
+version: '3.8'
+services:
+  mariadb:
+    image: mariadb:latest
+    container_name: ${MARIADB_CONTAINER_NAME}
+    restart: unless-stopped
+    environment:
+      - MARIADB_ROOT_PASSWORD=${MARIADB_ROOT_PASSWORD}
+      - MARIADB_DATABASE=${MARIADB_DATABASE}
+      - MARIADB_USER=${MARIADB_USER}
+      - MARIADB_PASSWORD=${MARIADB_PASSWORD}
+    ports:
+      - "${MARIADB_PORT}:3306"
+    volumes:
+      - ${MARIADB_DATA_DIR}:/var/lib/mysql
+      - ${MARIADB_CONFIG_DIR}:/etc/mysql/conf.d
+    networks:
+      - mariadb_network
+
+networks:
+  mariadb_network:
+    driver: bridge
