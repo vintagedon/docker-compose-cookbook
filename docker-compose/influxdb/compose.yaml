@@ -1,18 +1,14 @@
-# Name: compose.yaml
-#
-# Description:
-# Docker file for a standlone installation of InfluxDB
-# https://www.influxdata.com/
-# 
-#
-# Project: https://github.com/vintagedon/infrastructure-scripting/blob/main/docker-compose/
-# License: Apache-2.0
+# Docker Compose file for InfluxDB
+# Author: vintagedon
+# GitHub: https://github.com/vintagedon/infrastructure-scripting/blob/main/docker-compose/
+# Description: This Docker Compose file sets up an InfluxDB instance with customizable configuration.
 
 version: '2'
 services:
-	container:
+  container:
     environment:
       - TZ=America/New_York
+
   influxdb:
     image: influxdb:latest
     container_name: influxdb
