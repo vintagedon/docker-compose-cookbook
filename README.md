@@ -1,32 +1,70 @@
-# Infrastructure Scripts
+## Docker Compose Cookbook
 
-Collection of scripts and resources centered around Docker, Kubernetes, Ansible and Infrastructure as Code.
+> A collection of Docker compose scripts centered around use in a home lab for learning IT technologies.
 
-Used primarily in my Home Lab https://github.com/vintagedon/proxmoxlab
+## Table of Contents
 
-# Docker Compose
+- [About](#about)
+- [Features](#features)
+- [How to Use](#how-to-use)
+- [Contributing](#contributing)
+- [License](#license)
 
-Range of docker scirpts, including separate compose and .env files for changing / passing variables and secrets.
+## About 
 
-| Application | Description | Repository | 
-| :------------------- | :---------------------------------- | :----------: |
-| InfluxDB            | Time Series Database               | [REPO](https://github.com/vintagedon/infrastructure-scripting/tree/main/docker-compose/influxdb) |  
-| Ngnix Proxy Manager | Reverse Proxy and SSL Cert Manager | [REPO](https://github.com/vintagedon/infrastructure-scripting/tree/main/docker-compose/nginx-proxy-manager-sqlite) |  
-| SWAG                | Secure Web Application Gateway     | [REPO](https://github.com/vintagedon/infrastructure-scripting/tree/main/docker-compose/swag) |  
-| WikiJS              | Modern and Extensible Wiki         | [REPO](https://github.com/vintagedon/infrastructure-scripting/tree/main/docker-compose/wikijs) |  
+This repository provides docker compose files, along with .env files, in a standardized format that provide a starting point for spinning up common services and applications in a cookbook type format.
 
-# Ansible Playbooks and Roles
+NOTE: This collection is meant to be used in a home lab, non-critical development environment or for exploring technolgies. These compose files should never be used in a production environment without modification to fit your security needs.
 
-Re-usable Ansible roles that can be used either standalone or as building blocks for larger playbooks.
+## Features
 
-## Ansible Roles
+- Comprehensive collection of Docker Compose files
+- Utilizes .env files for easy configuration
+- Focus on self-hosted technologies
+- Designed for use in virtualization home labs
+- Covers a wide range of IT and development technologies
 
-| Ansible Role | Description | Repository | 
-| :---------------------------- | :---------------------------------- | :----------: |
-| ansible-role-linux-update-apt | Upgrade via apt & reboot if necessary | [REPO](https://github.com/vintagedon/infrastructure-scripting/tree/main/ansible/roles) |
+## Categories
 
-## Support Me
+Our Docker Compose files are organized into the following categories:
 
-If you find this useful, you can always buy me a cup of coffee!  
-  
-[![ko-fi](https://ko-fi.com/img/githubbutton_sm.svg)](https://ko-fi.com/E1E8S7NNI)
+- [Networking](./networking)
+- [Monitoring & Logging](./monitoring-logging)
+- [Automation & Orchestration](./automation-orchestration)
+- [Development & CI/CD](./development-ci-cd)
+- [Database Management](./database-management)
+- [Storage Solutions](./storage-solutions)
+- [Security](./security)
+- [Container Management](./container-management)
+- [Web & Application Servers](./web-application-servers)
+- [Messaging & Collaboration](./messaging-collaboration)
+- [Virtualization](./virtualization)
+- [Home Automation](./home-automation)
+- [Media & Entertainment](./media-entertainment)
+- [Educational Tools](./educational-tools)
+- [Miscellaneous](./miscellaneous)
+
+## How to Use
+
+Each Docker Compose file in this repository is accompanied by a corresponding .env file for configuration. To use any of the setups:
+
+1. Navigate to the desired application's directory
+1. Copy the .env.example file to .env
+1. Modify the .env file with your specific configuration
+1. Run docker-compose up -d to start the containers
+
+**Clone the Repository**
+    ```
+    git clone https://github.com/vintagedon/docker-compose-cookbook
+    ```
+## Contributing
+
+We welcome contributions! If you have a Docker Compose file for an application not yet included, please submit a pull request. For major changes, please open an issue first to discuss what you would like to change.
+
+## License
+
+This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+---
+
+Thank you for using **[REPO_NAME]**! If you have any questions or need support, feel free to open an issue or contact the maintainers.
