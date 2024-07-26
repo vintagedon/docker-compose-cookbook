@@ -1,0 +1,25 @@
+# Docker Compose file for PostgreSQL
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook
+# Description: This Docker Compose file sets up a PostgreSQL instance with customizable configuration.
+
+version: '3.8'
+services:
+  postgres:
+    image: postgres:latest
+    container_name: ${POSTGRES_CONTAINER_NAME}
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    ports:
+      - "${POSTGRES_PORT}:5432"
+    volumes:
+      - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
+      - ${POSTGRES_CONFIG_DIR}:/etc/postgresql
+    networks:
+      - postgres_network
+
+networks:
+  postgres_network:
+    driver: bridge
