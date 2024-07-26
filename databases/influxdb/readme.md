@@ -2,6 +2,8 @@
 
 This project contains a Docker Compose file and environment configuration for setting up InfluxDB in a Docker container.
 
+InfluxDB is an open-source time series database designed to handle high write and query loads. It is a key component of the TICK stack (Telegraf, InfluxDB, Chronograf, Kapacitor) and is optimized for fast, high-availability storage and retrieval of time series data in fields such as operations monitoring, application metrics, Internet of Things sensor data, and real-time analytics.
+
 ## GitHub Repository
 [https://github.com/vintagedon/infrastructure-scripting/blob/main/docker-compose/](https://github.com/vintagedon/infrastructure-scripting/blob/main/docker-compose/)
 
