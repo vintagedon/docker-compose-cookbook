@@ -1,0 +1,45 @@
+# Docker Compose file for Cacti-MySQL
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook/monitoring-logging/cacti-mysql
+# Description: This Docker Compose file sets up a Cacti instance with MySQL database.
+
+version: "3.8"
+services:
+  cacti:
+    container_name: ${CONTAINER_NAME:-cacti-mysql_cacti}
+    image: cacti/cacti:latest
+    ports:
+      - "${PORT:-80}:80"
+    volumes:
+      - ${CACTI_DIR:-./cacti}:/cacti
+      - ${RRA_DIR:-./rra}:/var/lib/cacti/rra
+    environment:
+      - DB_HOST=${MYSQL_HOST:-db}
+      - DB_PORT=${MYSQL_PORT:-3306}
+      - DB_NAME=${MYSQL_DATABASE:-cacti}
+      - DB_USER=${MYSQL_USER:-cactiuser}
+      - DB_PASS=${MYSQL_PASSWORD:-cactipassword}
+      - CACTI_URL=${CACTI_URL:-http://localhost}
+      - CACTI_CSRF_SECRET=${CACTI_CSRF_SECRET:-changeme}
+      - TZ=${TZ:-UTC}
+      - RDB_OPTIMIZATION=${RDB_OPTIMIZATION:-1}
+      - SPINE_THREADS=${SPINE_THREADS:-10}
+    depends_on:
+      - db
+    restart: unless-stopped
+
+  db:
+    image: mysql:5.7
+    container_name: ${DB_CONTAINER_NAME:-cacti-mysql_db}
+    command: --sql_mode="NO_ENGINE_SUBSTITUTION"
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpassword}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-cacti}
+      - MYSQL_USER=${MYSQL_USER:-cactiuser}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-cactipassword}
+    volumes:
+      - ${DB_DATA_DIR:-./mysql}:/var/lib/mysql
+    restart: unless-stopped
+
+networks:
+  default:
+    name: cacti_mysql_network
