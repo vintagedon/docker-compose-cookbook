@@ -5,7 +5,7 @@ This project contains a Docker Compose file and environment configuration for se
 [SoftEther VPN](https://www.softether.org/) is a powerful and easy-to-use multi-protocol VPN software. It supports various protocols including OpenVPN, IPsec, L2TP, MS-SSTP, L2TPv3, and EtherIP. SoftEther VPN has also implemented the newly-developed SoftEther VPN protocol, which is faster than OpenVPN.
 
 ## GitHub Repository
-[https://github.com/yourusername/docker-softether-setup](https://github.com/yourusername/docker-softether-setup)
+[https://github.com/vintagedon/docker-softether-setup](https://github.com/vintagedon/docker-softether-setup)
 
 ## Prerequisites
 - Docker
