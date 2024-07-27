@@ -1,0 +1,31 @@
+# Docker Compose file for Fluentd
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook/monitoring-logging/fluentd
+# Description: This Docker Compose file sets up a Fluentd instance with customizable configuration.
+
+version: "3.8"
+services:
+  fluentd:
+    container_name: ${CONTAINER_NAME:-fluentd}
+    image: fluent/fluentd:v1.16-1
+    ports:
+      - "${FLUENTD_PORT:-24224}:24224"
+      - "${FLUENTD_PORT:-24224}:24224/udp"
+    volumes:
+      - ${CONFIG_DIR:-./config}:/fluentd/etc
+      - ${LOG_DIR:-./log}:/fluentd/log
+      - ${DATA_DIR:-./data}:/fluentd/data
+    environment:
+      - FLUENTD_CONF=${FLUENTD_CONF:-fluent.conf}
+      - FLUENT_UID=${FLUENT_UID:-1000}
+      - FLUENT_GID=${FLUENT_GID:-1000}
+      - TZ=${TZ:-UTC}
+      - LOG_LEVEL=${LOG_LEVEL:-info}
+      - FLUENT_CONF_ENCODING=${FLUENT_CONF_ENCODING:-utf-8}
+      - FLUENT_WORKERS=${FLUENT_WORKERS:-1}
+      - FLUENT_ROOT_DIR=${FLUENT_ROOT_DIR:-/fluentd}
+      - FLUENT_DISABLE_SHARED_SOCKET=${FLUENT_DISABLE_SHARED_SOCKET:-false}
+    restart: unless-stopped
+
+networks:
+  default:
+    name: fluentd_network
