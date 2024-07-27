@@ -5,7 +5,7 @@ This project contains a Docker Compose file and environment configuration for se
 [Prometheus](https://prometheus.io/) is an open-source systems monitoring and alerting toolkit. It collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.
 
 ## GitHub Repository
-[https://github.com/vintagedon/docker-compose-cookbook/tree/main/monitoring-logging/Prometheus](https://github.com/vintagedon/docker-compose-cookbook/tree/main/monitoring-logging/Prometheus)
+https://github.com/vintagedon/docker-compose-cookbook/tree/main/monitoring-logging/Prometheus
 
 ## Prerequisites
 - Docker
