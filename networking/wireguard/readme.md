@@ -5,7 +5,7 @@ This project contains a Docker Compose file and environment configuration for se
 [Wireguard](https://www.wireguard.com/) is a simple yet fast and modern VPN that utilizes state-of-the-art cryptography. It aims to be faster, simpler, leaner, and more useful than IPsec, while avoiding the massive headache.
 
 ## GitHub Repository
-[https://github.com/yourusername/docker-wireguard-setup](https://github.com/yourusername/docker-wireguard-setup)
+https://github.com/vintagedon/docker-compose-cookbook
 
 ## Prerequisites
 - Docker
