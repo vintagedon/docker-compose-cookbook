@@ -1,6 +1,6 @@
 # OpenVPN Docker Setup
 
-This project contains a Docker Compose file and environment configuration for setting up an OpenVPN server in a Docker container. It includes configuration options for customizing your OpenVPN deployment.
+This project contains a Docker Compose file and environment configuration for setting up an OpenVPN server in a Docker container. It includes both basic and advanced configuration options for customizing your OpenVPN deployment.
 
 [OpenVPN](https://openvpn.net/) is a full-featured open source SSL VPN solution that accommodates a wide range of configurations, including remote access, site-to-site VPNs, Wi-Fi security, and enterprise-scale remote access solutions with load balancing.
 
@@ -26,25 +26,7 @@ This project contains a Docker Compose file and environment configuration for se
 
 ## Usage
 
-1. Edit the `.env` file and replace the placeholder values with your desired configuration. The configuration includes:
-
-   ```
-   OPENVPN_CONTAINER_NAME=openvpn
-   OPENVPN_PORT=1194
-   OPENVPN_PROTO=udp
-   OPENVPN_CONFIG_DIR=/path/to/your/openvpn/config
-   OPENVPN_DATA_DIR=/path/to/your/openvpn/data
-   OPENVPN_SERVERNAME=myopenvpnserver
-
-   # Additional options
-   OPENVPN_DNS1=8.8.8.8
-   OPENVPN_DNS2=8.8.4.4
-   OPENVPN_CIPHER=AES-256-GCM
-   OPENVPN_AUTH=SHA256
-   OPENVPN_VERB=3
-   OPENVPN_CLIENT_TO_CLIENT=false
-   OPENVPN_MAX_CLIENTS=100
-   ```
+1. Edit the `.env` file and replace the placeholder values with your desired configuration. 
 
 2. Initialize the OpenVPN configuration:
    ```
@@ -60,14 +42,35 @@ This project contains a Docker Compose file and environment configuration for se
 
 ## Configuration Options
 
-The following additional options can be configured in the `.env` file:
+### Basic Options
 
-- `OPENVPN_DNS1` and `OPENVPN_DNS2`: Set the DNS servers for VPN clients. Default: 8.8.8.8 and 8.8.4.4 (Google DNS)
-- `OPENVPN_CIPHER`: Set the cipher for data channel packets. Default: AES-256-GCM
-- `OPENVPN_AUTH`: Set the authentication algorithm. Default: SHA256
-- `OPENVPN_VERB`: Set the verbosity level of OpenVPN's logs (0-9). Default: 3
-- `OPENVPN_CLIENT_TO_CLIENT`: Enable or disable client-to-client communication. Set to 'true' to enable. Default: false
-- `OPENVPN_MAX_CLIENTS`: Set the maximum number of concurrent clients. Default: 100
+- `OPENVPN_CONTAINER_NAME`: Name of the OpenVPN container
+- `OPENVPN_PORT`: Port for OpenVPN to listen on
+- `OPENVPN_PROTO`: Protocol for OpenVPN (udp or tcp)
+- `OPENVPN_CONFIG_DIR`: Directory for OpenVPN configuration files
+- `OPENVPN_DATA_DIR`: Directory for OpenVPN data
+- `OPENVPN_SERVERNAME`: Name of the OpenVPN server
+
+### Common Options
+
+- `OPENVPN_DNS1` and `OPENVPN_DNS2`: Set the DNS servers for VPN clients
+- `OPENVPN_CIPHER`: Set the cipher for data channel packets
+- `OPENVPN_AUTH`: Set the authentication algorithm
+- `OPENVPN_VERB`: Set the verbosity level of OpenVPN's logs (0-9)
+- `OPENVPN_CLIENT_TO_CLIENT`: Enable or disable client-to-client communication
+- `OPENVPN_MAX_CLIENTS`: Set the maximum number of concurrent clients
+
+### Advanced Options
+
+- `OPENVPN_PUSH`: Set additional push options (e.g., routes)
+- `OPENVPN_TLS_VERSION_MIN`: Set the minimum TLS version
+- `OPENVPN_TLS_CIPHER`: Set the TLS cipher
+- `OPENVPN_DUPLICATE_CN`: Allow duplicate Common Names
+- `OPENVPN_KEEPALIVE`: Set keepalive parameters
+- `OPENVPN_RENEG_SEC`: Set renegotiation time in seconds
+- `OPENVPN_COMP_LZO`: Set compression algorithm
+- `OPENVPN_REMOTE_CERT_TLS`: Require specific key usage and extended key usage for peer certificate
+- `OPENVPN_USER` and `OPENVPN_GROUP`: Set the user and group for the OpenVPN daemon
 
 To use these options:
 
@@ -98,22 +101,6 @@ Clients can connect to the OpenVPN server using the generated .ovpn file and an 
 
 ## Data Persistence
 OpenVPN configuration and data are stored in the directories specified by `OPENVPN_CONFIG_DIR` and `OPENVPN_DATA_DIR`. Ensure these paths exist on your host system and have appropriate permissions.
-
-## Expected Results
-After running `docker-compose up -d`, you should see the OpenVPN container running. You can verify this by using the `docker ps` command. The output should look similar to this:
-
-```
-CONTAINER ID   IMAGE                 COMMAND                  CREATED          STATUS          PORTS                   NAMES
-1a2b3c4d5e6f   kylemanna/openvpn     "ovpn_run"               10 seconds ago   Up 9 seconds    0.0.0.0:1194->1194/udp  openvpn
-```
-
-This output indicates that:
-- The OpenVPN container is running
-- It's using the kylemanna/openvpn image
-- The container name matches what you set in `OPENVPN_CONTAINER_NAME`
-- The OpenVPN port (default 1194) is mapped to the host
-
-If you see this output, your OpenVPN setup is running successfully and should be ready to accept client connections.
 
 ## Security Note
 While this setup provides a good starting point, additional security measures should be implemented for production use, including:
