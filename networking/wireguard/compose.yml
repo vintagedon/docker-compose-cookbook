@@ -1,5 +1,5 @@
 # Docker Compose file for Wireguard
-# GitHub: https://github.com/yourusername/docker-wireguard-setup
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook
 # Description: This Docker Compose file sets up a Wireguard instance with customizable configuration.
 
 version: '3.8'
