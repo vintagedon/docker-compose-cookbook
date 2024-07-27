@@ -1,0 +1,31 @@
+# Docker Compose file for OpenVPN
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook
+# Description: This Docker Compose file sets up an OpenVPN instance with customizable configuration.
+
+version: '3.8'
+services:
+  openvpn:
+    container_name: ${OPENVPN_CONTAINER_NAME}
+    image: kylemanna/openvpn:latest
+    ports:
+      - "${OPENVPN_PORT}:1194/${OPENVPN_PROTO}"
+    volumes:
+      - ${OPENVPN_CONFIG_DIR}:/etc/openvpn
+      - ${OPENVPN_DATA_DIR}:/var/lib/openvpn
+    cap_add:
+      - NET_ADMIN
+    environment:
+      - EASYRSA_BATCH=1
+      - EASYRSA_REQ_CN=${OPENVPN_SERVERNAME}
+      - OPENVPN_DNS1=${OPENVPN_DNS1:-8.8.8.8}
+      - OPENVPN_DNS2=${OPENVPN_DNS2:-8.8.4.4}
+      - OPENVPN_CIPHER=${OPENVPN_CIPHER:-AES-256-GCM}
+      - OPENVPN_AUTH=${OPENVPN_AUTH:-SHA256}
+      - OPENVPN_VERB=${OPENVPN_VERB:-3}
+      - OPENVPN_CLIENT_TO_CLIENT=${OPENVPN_CLIENT_TO_CLIENT:-false}
+      - OPENVPN_MAX_CLIENTS=${OPENVPN_MAX_CLIENTS:-100}
+    restart: unless-stopped
+
+networks:
+  default:
+    name: openvpn_network
