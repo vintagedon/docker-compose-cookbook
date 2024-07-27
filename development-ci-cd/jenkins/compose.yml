@@ -1,0 +1,33 @@
+# Docker Compose file for Jenkins
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook/development-ci-cd/jenkins
+# Description: This Docker Compose file sets up a Jenkins instance with customizable configuration.
+
+version: "3.8"
+services:
+  jenkins:
+    container_name: ${CONTAINER_NAME:-jenkins}
+    image: jenkins/jenkins:lts
+    ports:
+      - "${JENKINS_PORT:-8080}:8080"
+      - "${JENKINS_SLAVE_AGENT_PORT:-50000}:50000"
+    volumes:
+      - jenkins_home:${JENKINS_HOME:-/var/jenkins_home}
+    environment:
+      - JAVA_OPTS=${JAVA_OPTS:--Xmx2g}
+      - JENKINS_OPTS=${JENKINS_OPTS}
+      - JENKINS_SLAVE_AGENT_PORT=${JENKINS_SLAVE_AGENT_PORT:-50000}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/login"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+volumes:
+  jenkins_home:
+    name: jenkins_home
+
+networks:
+  default:
+    name: jenkins_network
