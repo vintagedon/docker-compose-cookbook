@@ -15,9 +15,9 @@ Welcome to the Automation and Orchestration section of the docker-compose-cookbo
 
 | Tool | Description | Repo Link |
 |------|-------------|-----------|
-| Ansible AWX (with Postgres and Redis) | Web UI for Ansible with PostgreSQL and Redis | [ansibleawx-postgres-redis](https://github.com/vintagedon/docker-compose-cookbook/tree/main/automation-orchestration/ansibleawx-postgres-redis) |
+| Ansible AWX (with Postgres and Redis) | Web UI for Ansible with PostgreSQL and Redis | [ansibleawx](https://github.com/vintagedon/docker-compose-cookbook/tree/main/automation-orchestration/ansibleawx-postgres-redis) |
 | Rundeck | Job scheduler and runbook automation | [rundeck](https://github.com/vintagedon/docker-compose-cookbook/tree/main/automation-orchestration/rundeck) |
-| Stackstorm (with MongoDB, RabbitMQ, and Postgres) | Event-driven automation platform | [stackstorm-mongodb-rabbitmq-postgres](https://github.com/vintagedon/docker-compose-cookbook/tree/main/automation-orchestration/stackstorm-mongodb-rabbitmq-postgres) |
+| Stackstorm (with MongoDB, RabbitMQ, and Postgres) | Event-driven automation platform | [stackstorm](https://github.com/vintagedon/docker-compose-cookbook/tree/main/automation-orchestration/stackstorm-mongodb-rabbitmq-postgres) |
 
 ## General Structure
 
