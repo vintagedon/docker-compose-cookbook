@@ -1,0 +1,39 @@
+# Docker Compose file for Wireguard
+# GitHub: https://github.com/yourusername/docker-wireguard-setup
+# Description: This Docker Compose file sets up a Wireguard instance with customizable configuration.
+
+version: '3.8'
+services:
+  wireguard:
+    container_name: ${WIREGUARD_CONTAINER_NAME}
+    image: linuxserver/wireguard:latest
+    ports:
+      - "${WIREGUARD_PORT}:51820/udp"
+    volumes:
+      - ${WIREGUARD_CONFIG_DIR}:/config
+      - /lib/modules:/lib/modules
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=Etc/UTC
+      - SERVERURL=${SERVERURL}
+      - SERVERPORT=${SERVERPORT}
+      - PEERS=${WIREGUARD_PEERS}
+      - PEERDNS=${PEERDNS:-auto}
+      - INTERNAL_SUBNET=${INTERNAL_SUBNET}
+      - ALLOWEDIPS=${ALLOWEDIPS:-0.0.0.0/0, ::/0}
+      - PERSISTENTKEEPALIVE=${PERSISTENTKEEPALIVE:-25}
+      - LOG_CONFS=${LOG_CONFS:-true}
+      - DEVICE_NAME=${DEVICE_NAME:-wg0}
+      - PRESERVE_CONFIG=${PRESERVE_CONFIG:-false}
+      - NET_ADMIN=${NET_ADMIN:-true}
+    sysctls:
+      - net.ipv4.conf.all.src_valid_mark=1
+    restart: unless-stopped
+
+networks:
+  default:
+    name: wireguard_network
