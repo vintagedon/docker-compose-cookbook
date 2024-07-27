@@ -1,0 +1,28 @@
+# Docker Compose file for Redis
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook
+# Description: This Docker Compose file sets up a Redis instance with customizable configuration.
+
+version: '3.8'
+services:
+  redis:
+    image: redis:latest
+    container_name: ${REDIS_CONTAINER_NAME}
+    restart: unless-stopped
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - ${REDIS_DATA_DIR}:/data
+      - ${REDIS_CONFIG_FILE}:/usr/local/etc/redis/redis.conf
+    command: redis-server /usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_MAXMEMORY=${REDIS_MAXMEMORY:-100mb}
+      - REDIS_MAXMEMORY_POLICY=${REDIS_MAXMEMORY_POLICY:-allkeys-lru}
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  default:
+    name: redis_network
