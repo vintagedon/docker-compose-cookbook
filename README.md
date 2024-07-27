@@ -28,11 +28,25 @@ NOTE: This collection is meant to be used in a home lab, non-critical developmen
 
 Our Docker Compose files are organized into the following categories:
 
+- [Database Management](./database-management)
+
+| Database | Type | Description | Repository | Project Homepage |
+|----------|------|-------------|------------|------------------|
+| MySQL | Relational | Open-source relational database management system | [MySQL](./mysql) | [mysql.com](https://www.mysql.com/) |
+| MariaDB | Relational | Community-developed fork of MySQL | [MariaDB](./mariadb) | [mariadb.org](https://mariadb.org/) |
+| PostgreSQL | Relational | Advanced open-source relational database | [PostgreSQL](./postgresql) | [postgresql.org](https://www.postgresql.org/) |
+| MongoDB | Document | NoSQL database with JSON-like documents | [MongoDB](./mongodb) | [mongodb.com](https://www.mongodb.com/) |
+| Redis | Key-Value | In-memory data structure store | [Redis](./redis) | [redis.io](https://redis.io/) |
+| Cassandra | Wide Column | Highly scalable, distributed NoSQL database | [Cassandra](./cassandra) | [cassandra.apache.org](https://cassandra.apache.org/) |
+| Neo4j | Graph | Native graph database with ACID compliance | [Neo4j](./neo4j) | [neo4j.com](https://neo4j.com/) |
+| CouchDB | Document | JSON document-based database with HTTP API | [CouchDB](./couchdb) | [couchdb.apache.org](https://couchdb.apache.org/) |
+| SQLite | Relational | Lightweight, serverless relational database | [SQLite](./sqlite) | [sqlite.org](https://www.sqlite.org/) |
+| InfluxDB | Time Series | Purpose-built time series database | [InfluxDB](./influxdb) | [influxdata.com](https://www.influxdata.com/) |
+
 - [Networking](./networking)
 - [Monitoring & Logging](./monitoring-logging)
 - [Automation & Orchestration](./automation-orchestration)
 - [Development & CI/CD](./development-ci-cd)
-- [Database Management](./database-management)
 - [Storage Solutions](./storage-solutions)
 - [Security](./security)
 - [Container Management](./container-management)
