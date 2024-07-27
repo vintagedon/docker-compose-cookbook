@@ -1,0 +1,33 @@
+# Docker Compose file for Apache Cassandra
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook
+# Description: This Docker Compose file sets up a Cassandra instance with customizable configuration.
+
+version: '3.8'
+services:
+  cassandra:
+    image: cassandra:latest
+    container_name: ${CASSANDRA_CONTAINER_NAME}
+    ports:
+      - "${CASSANDRA_NATIVE_TRANSPORT_PORT}:9042"
+      - "${CASSANDRA_RPC_PORT}:9160"
+    volumes:
+      - ${CASSANDRA_DATA_DIR}:/var/lib/cassandra
+      - ${CASSANDRA_CONFIG_DIR}:/etc/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=${CASSANDRA_CLUSTER_NAME}
+      - CASSANDRA_SEEDS=${CASSANDRA_SEEDS}
+      - CASSANDRA_NUM_TOKENS=${CASSANDRA_NUM_TOKENS}
+      - CASSANDRA_DC=${CASSANDRA_DC}
+      - CASSANDRA_RACK=${CASSANDRA_RACK}
+      - CASSANDRA_ENDPOINT_SNITCH=${CASSANDRA_ENDPOINT_SNITCH}
+      - MAX_HEAP_SIZE=${CASSANDRA_MAX_HEAP_SIZE}
+      - HEAP_NEWSIZE=${CASSANDRA_HEAP_NEWSIZE}
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  default:
+    name: cassandra_network
