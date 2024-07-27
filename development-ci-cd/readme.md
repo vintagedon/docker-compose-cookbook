@@ -1,6 +1,6 @@
-# Development & CI/CD
+# Development CI/CD
 
-This section of the docker-compose-cookbook repository contains Docker Compose setups for various development and CI/CD tools. These setups are designed to help you quickly deploy and manage essential tools for software development and continuous integration/continuous deployment pipelines.
+Welcome to the Development CI/CD section of the docker-compose-cookbook! This directory contains various Docker Compose configurations for setting up development, continuous integration, and continuous deployment tools.
 
 ## Table of Contents
 
@@ -13,78 +13,61 @@ This section of the docker-compose-cookbook repository contains Docker Compose s
 
 ## Available Setups
 
-| Application | Description | Repository Link |
-|-------------|-------------|-----------------|
-| Gitea (MySQL) | A lightweight, self-hosted Git service with MySQL backend | [gitea-mysql](./gitea-mysql) |
-| Gitea (PostgreSQL) | A lightweight, self-hosted Git service with PostgreSQL backend | [gitea-postgresql](./gitea-postgresql) |
-| Gitea (SQLite) | A lightweight, self-hosted Git service with SQLite backend | [gitea-sqlite](./gitea-sqlite) |
-| GitLab CE | A complete DevOps platform with Git repository management, CI/CD, monitoring, and more | [gitlabce](./gitlabce) |
-| Gogs (MySQL) | A simple, lightweight, and self-hosted Git service with MySQL backend | [gogs-mysql](./gogs-mysql) |
-| Gogs (PostgreSQL) | A simple, lightweight, and self-hosted Git service with PostgreSQL backend | [gogs-postgresql](./gogs-postgresql) |
-| Gogs (SQLite) | A simple, lightweight, and self-hosted Git service with SQLite backend | [gogs-sqlite](./gogs-sqlite) |
-| Jenkins | An open-source automation server for building, deploying, and automating any project | [jenkins](./jenkins) |
+| Tool | Description | Repo Link |
+|------|-------------|-----------|
+| Gitea (MySQL) | Lightweight Git service with MySQL database | [gitea-mysql](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/gitea-mysql) |
+| Gitea (PostgreSQL) | Lightweight Git service with PostgreSQL database | [gitea-postgresql](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/gitea-postgresql) |
+| Gitea (SQLite) | Lightweight Git service with SQLite database | [gitea-sqlite](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/gitea-sqlite) |
+| GitLab CE | Open-source end-to-end software development platform | [gitlabce](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/gitlabce) |
+| Gogs (MySQL) | Simple, stable, and extensible self-hosted Git service with MySQL | [gogs-mysql](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/gogs-mysql) |
+| Gogs (PostgreSQL) | Simple, stable, and extensible self-hosted Git service with PostgreSQL | [gogs-postgresql](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/gogs-postgresql) |
+| Gogs (SQLite) | Simple, stable, and extensible self-hosted Git service with SQLite | [gogs-sqlite](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/gogs-sqlite) |
+| Jenkins | Leading open-source automation server for CI/CD | [jenkins](https://github.com/vintagedon/docker-compose-cookbook/tree/main/development-ci-cd/jenkins) |
 
 ## General Structure
 
-Each application setup in this section follows a consistent structure:
+Each subdirectory typically contains the following files:
 
-```
-application-name/
-├── docker-compose.yml
-├── .env
-└── README.md
-```
-
-- `docker-compose.yml`: Defines the services, networks, and volumes for the application.
-- `.env`: Contains environment variables for customizing the setup.
-- `README.md`: Provides specific instructions, configuration options, and other relevant information for the application.
-
-Additional files or directories may be present depending on the specific requirements of each application.
+- `docker-compose.yml`: The main configuration file for the Docker services
+- `.env`: Environment variables file (you may need to create this)
+- Additional configuration files specific to the tool
 
 ## Usage
 
-To use any of these setups:
+To use any of these setups, follow these general steps:
 
-1. Navigate to the desired application's directory.
-2. Review the README.md file for specific instructions and configuration options.
-3. Adjust the `.env` file (if present) to customize the setup.
-4. Run `docker-compose up -d` to start the application.
+1. Navigate to the desired tool's directory
+2. Create and configure the `.env` file if necessary
+3. Run the Docker Compose command to start the services
 
-For example, to set up Gitea with PostgreSQL:
+For example, to set up Gitea with MySQL:
 
 ```bash
-cd gitea-postgresql
-cat README.md
-nano .env  # Make any necessary changes
+cd gitea-mysql
+cp .env.example .env  # Create .env file from example if available
+nano .env  # Edit the .env file to configure your settings
 docker-compose up -d
 ```
 
+Refer to the specific README in each tool's directory for detailed instructions and configuration options.
+
 ## Security Considerations
 
-When deploying these Development & CI/CD tools, consider the following security best practices:
+When working with development and CI/CD tools, keep these security practices in mind:
 
-1. **Access Control**: Use strong passwords and enable two-factor authentication where available.
-2. **Network Security**: Run tools on isolated networks and use VPNs for remote access.
-3. **Updates**: Keep Docker images and applications up-to-date with the latest security patches.
-4. **Encryption**: Enable HTTPS and encrypt data at rest where possible.
-5. **Secrets Management**: Use Docker secrets or dedicated tools to manage sensitive information.
-6. **Logging and Monitoring**: Enable and regularly review logs; set up alerts for suspicious activities.
-7. **Least Privilege**: Grant minimum necessary permissions, especially in CI/CD pipelines.
-8. **Backups**: Regularly backup data and test recovery processes.
-
-Always refer to each tool's official documentation for specific security guidelines.
+- Regularly update your Docker images and host system
+- Use strong, unique passwords for all services
+- Implement proper firewall rules to control access
+- Be cautious when exposing services to the internet
+- Regularly audit your configurations and logs
+- Implement proper access controls and user management
+- Secure your repositories and CI/CD pipelines
+- Use HTTPS for all connections when possible
 
 ## Contributing
 
-Contributions to this collection of Development & CI/CD Docker Compose setups are welcome. Please feel free to submit issues, fork the repository, or send pull requests for:
-
-- Adding new Development & CI/CD tools
-- Improving existing setups
-- Updating documentation
-- Sharing best practices or usage tips
-
-Please ensure that any contributions maintain the existing structure and quality standards of the repository.
+We welcome contributions to improve and expand this development and CI/CD toolkit! If you have suggestions, bug reports, or want to add a new tool, please feel free to open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](../LICENSE) file in the root directory for details.
+This project is licensed under the MIT License. See the [LICENSE](https://github.com/vintagedon/docker-compose-cookbook/blob/main/LICENSE) file for full details.
