@@ -6,7 +6,7 @@ Graylog is a powerful open-source log management and analysis platform. It allow
 
 ## GitHub Repository
 
-https://github.com/vintagedon/docker-compose-cookbook/monitoring-logging/graylog
+https://github.com/vintagedon/docker-compose-cookbook/monitoring-logging/greylog-elasticsearch-mongodb
 
 ## Prerequisites
 
