@@ -1,0 +1,32 @@
+# Docker Compose file for Rundeck
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook/automation-orchestration/rundeck
+# Description: This Docker Compose file sets up a Rundeck instance with customizable configuration.
+
+version: "3.8"
+services:
+  rundeck:
+    container_name: ${CONTAINER_NAME}
+    image: rundeck/rundeck
+    ports:
+      - "${PORT}:4440"
+    volumes:
+      - ${RUNDECK_DATADIR}:/home/rundeck/server/data
+    environment:
+      - RUNDECK_GRAILS_URL=${RUNDECK_GRAILS_URL}
+      - RUNDECK_SERVER_ADDRESS=${RUNDECK_SERVER_ADDRESS}
+      - RUNDECK_DATABASE_URL=${RUNDECK_DATABASE_URL}
+      - RUNDECK_DATABASE_DRIVER=${RUNDECK_DATABASE_DRIVER}
+      - RUNDECK_DATABASE_USERNAME=${RUNDECK_DATABASE_USERNAME}
+      - RUNDECK_DATABASE_PASSWORD=${RUNDECK_DATABASE_PASSWORD}
+      - RUNDECK_SECURITY_HTTPHEADERS_ENABLED=${RUNDECK_SECURITY_HTTPHEADERS_ENABLED}
+      - RUNDECK_SECURITY_CSP_ENABLED=${RUNDECK_SECURITY_CSP_ENABLED}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:4440"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  default:
+    name: rundeck_network
