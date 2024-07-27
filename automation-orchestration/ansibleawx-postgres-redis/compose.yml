@@ -1,0 +1,48 @@
+# Docker Compose file for Ansible AWX with PostgreSQL and Redis
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook/automation-orchestration/ansibleawx-postgres-redis
+# Description: This Docker Compose file sets up an Ansible AWX instance with PostgreSQL and Redis, using customizable configuration.
+
+version: '3'
+
+services:
+  ansibleawx:
+    image: ansible/awx:latest
+    container_name: ansibleawx
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "${AWX_HOST_PORT}:8052"
+    environment:
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=awx
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=awx
+      - AWX_ADMIN_USER=${AWX_ADMIN_USER}
+      - AWX_ADMIN_PASSWORD=${AWX_ADMIN_PASSWORD}
+      - AWX_SECRET_KEY=${AWX_SECRET_KEY}
+      - AWX_REPLICAS=${AWX_REPLICAS:-1}
+    volumes:
+      - ./awx_settings:/etc/tower
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:12
+    container_name: ansibleawx_postgres
+    volumes:
+      - ${POSTGRES_DATA_DIR}:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=awx
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+      - POSTGRES_DB=awx
+    restart: unless-stopped
+
+  redis:
+    image: redis:6
+    container_name: ansibleawx_redis
+    restart: unless-stopped
+
+networks:
+  default:
+    name: ansibleawx_network
