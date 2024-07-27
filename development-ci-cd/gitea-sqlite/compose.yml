@@ -1,0 +1,41 @@
+# Docker Compose file for Gitea with SQLite
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook/development-ci-cd/gitea-sqlite
+# Description: This Docker Compose file sets up a Gitea instance with SQLite database and customizable configuration.
+
+version: "3.8"
+services:
+  gitea:
+    container_name: ${CONTAINER_NAME:-gitea}
+    image: gitea/gitea:latest
+    ports:
+      - "${HTTP_PORT:-3000}:3000"
+      - "${SSH_PORT:-22}:22"
+    volumes:
+      - gitea-data:/data
+      - gitea-config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - USER_UID=${USER_UID:-1000}
+      - USER_GID=${USER_GID:-1000}
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__database__PATH=/data/gitea.db
+      - GITEA__server__ROOT_URL=${GITEA__server__ROOT_URL:-http://localhost:3000/}
+      - GITEA__server__SSH_DOMAIN=${GITEA__server__SSH_DOMAIN:-localhost}
+      - GITEA__server__SSH_PORT=${SSH_PORT:-22}
+      - GITEA__server__DOMAIN=${GITEA__server__DOMAIN:-localhost}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/sbin/gitea", "status"]
+      interval: 60s
+      timeout: 3s
+      retries: 5
+      start_period: 5s
+
+volumes:
+  gitea-data:
+  gitea-config:
+
+networks:
+  default:
+    name: gitea_network
