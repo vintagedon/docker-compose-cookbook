@@ -1,0 +1,28 @@
+# Prometheus configuration file
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook/tree/main/monitoring-logging/Prometheus
+
+global:
+  scrape_interval: ${PROMETHEUS_SCRAPE_INTERVAL}
+  evaluation_interval: ${PROMETHEUS_EVALUATION_INTERVAL}
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Add more scrape configs here as needed
+  # - job_name: 'example'
+  #   static_configs:
+  #     - targets: ['example.com:8080']
+
+# Add alerting rules here
+# rule_files:
+#   - "first_rules.yml"
+#   - "second_rules.yml"
+
+# Alertmanager configuration
+# alerting:
+#   alertmanagers:
+#   - static_configs:
+#     - targets:
+#       - alertmanager:9093
