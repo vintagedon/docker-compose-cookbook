@@ -1,0 +1,36 @@
+# Docker Compose file for Neo4j
+# GitHub: https://github.com/vintagedon/docker-compose-cookbook
+# Description: This Docker Compose file sets up a Neo4j instance with customizable configuration.
+
+version: '3.8'
+services:
+  neo4j:
+    image: neo4j:latest
+    container_name: ${NEO4J_CONTAINER_NAME}
+    ports:
+      - "${NEO4J_HTTP_PORT}:7474"
+      - "${NEO4J_BOLT_PORT}:7687"
+    volumes:
+      - ${NEO4J_DATA_DIR}:/data
+      - ${NEO4J_LOGS_DIR}:/logs
+      - ${NEO4J_IMPORT_DIR}:/var/lib/neo4j/import
+      - ${NEO4J_PLUGINS_DIR}:/plugins
+    environment:
+      - NEO4J_AUTH=${NEO4J_AUTH}
+      - NEO4J_dbms_memory_pagecache_size=${NEO4J_PAGECACHE_SIZE}
+      - NEO4J_dbms.memory.heap.initial_size=${NEO4J_HEAP_INITIAL_SIZE}
+      - NEO4J_dbms_memory_heap_max__size=${NEO4J_HEAP_MAX_SIZE}
+      - NEO4J_dbms_default__listen__address=0.0.0.0
+      - NEO4J_dbms_allow__upgrade=${NEO4J_ALLOW_UPGRADE}
+      - NEO4J_dbms_directories_import=/var/lib/neo4j/import
+      - NEO4J_dbms_security_procedures_unrestricted=${NEO4J_UNRESTRICTED_PROCEDURES}
+      - NEO4J_dbms_security_procedures_whitelist=${NEO4J_WHITELIST_PROCEDURES}
+    healthcheck:
+      test: ["CMD-SHELL", "wget --no-verbose --tries=1 --spider localhost:7474 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  default:
+    name: neo4j_network
