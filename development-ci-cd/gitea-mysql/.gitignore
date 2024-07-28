@@ -1,0 +1,79 @@
+# Gitea with MySQL Docker Setup .gitignore
+
+# Ignore environment file
+.env
+
+# Ignore Docker volumes
+data/
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore OS generated files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore backup files
+*_backup_*.tar.gz
+*_backup_*.sql
+
+# Ignore custom configuration files
+custom/
+app.ini
+
+# Ignore compiled binaries
+*.exe
+*.out
+*.app
+
+# Ignore packages and dependencies
+node_modules/
+vendor/
+
+# Ignore build output
+build/
+dist/
+
+# Ignore test coverage reports
+coverage/
+
+# Ignore local SSL certificates
+*.pem
+*.key
+*.crt
+
+# Ignore any local scripts
+local_scripts/
+
+# Ignore database files
+*.db
+*.sqlite
+
+# Ignore backup and restore scripts (if not meant to be shared)
+backup.sh
+restore.sh
+
+# Ignore user-specific files
+*.rst
+*.md
+!README.md
+!CHANGELOG.md
+!docs/*.md
+
+# Ignore any sensitive or personal files
+secrets.yml
+personal_notes.txt
+
+# Ignore files from development tools
+.devcontainer/

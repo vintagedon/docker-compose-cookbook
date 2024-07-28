@@ -1,0 +1,33 @@
+version: "3.8"
+
+services:
+  influxdb:
+    container_name: ${CONTAINER_NAME:-influxdb}
+    image: influxdb:${INFLUXDB_VERSION:-2.7}
+    ports:
+      - "${INFLUXDB_PORT:-8086}:8086"
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? influxdb_named_data:/var/lib/influxdb2: influxdb_data:/var/lib/influxdb2
+    environment:
+      - DOCKER_INFLUXDB_INIT_MODE=${INFLUXDB_INIT_MODE:-setup}
+      - DOCKER_INFLUXDB_INIT_USERNAME=${INFLUXDB_INIT_USERNAME:-admin}
+      - DOCKER_INFLUXDB_INIT_PASSWORD=${INFLUXDB_INIT_PASSWORD:-password123}
+      - DOCKER_INFLUXDB_INIT_ORG=${INFLUXDB_INIT_ORG:-myorg}
+      - DOCKER_INFLUXDB_INIT_BUCKET=${INFLUXDB_INIT_BUCKET:-mybucket}
+      - DOCKER_INFLUXDB_INIT_RETENTION=${INFLUXDB_INIT_RETENTION:-1w}
+      - DOCKER_INFLUXDB_INIT_ADMIN_TOKEN=${INFLUXDB_INIT_ADMIN_TOKEN:-mytoken}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "influx", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  influxdb_data:
+  influxdb_named_data:
+    name: influxdb_named_data
+
+networks:
+  default:
+    name: influxdb_network

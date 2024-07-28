@@ -1,116 +1,124 @@
 # Rundeck Docker Setup
 
-This project contains a Docker Compose setup for Rundeck, including basic and advanced configuration options.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Rundeck is an open-source automation service with a web console, command-line tools, and a WebAPI. It lets you easily run automation tasks across a set of nodes.
+Rundeck is an open-source automation service with a web console, command-line tools, and a WebAPI. It allows you to easily run automation tasks across a set of nodes.
 
-**Disclaimer:** This setup is based on general best practices and may not reflect the most current configuration options or requirements for Rundeck. Always refer to the [official Rundeck documentation](https://docs.rundeck.com/docs/) for the most up-to-date and accurate information.
+## Table of Contents
 
-## GitHub Repository
-
-https://github.com/vintagedon/docker-compose-cookbook/automation-orchestration/rundeck
-
-## Prerequisites
-
-- Docker
-- Docker Compose
-- At least 1GB of RAM available for Rundeck
+- [Rundeck Docker Setup](#rundeck-docker-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Advanced Configuration](#advanced-configuration)
+  - [Data Persistence](#data-persistence)
+  - [Networking](#networking)
+  - [Security Considerations](#security-considerations)
+  - [Performance Tuning](#performance-tuning)
+  - [Multi-Node Setup](#multi-node-setup)
+  - [Upgrading](#upgrading)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Project Structure
 
 ```
 .
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+├── docs/
+│   ├── CONFIGURATION.md
+│   ├── CONTRIBUTING.md
+│   ├── MULTI_NODE_SETUP.md
+│   ├── PERFORMANCE_TUNING.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   └── UPGRADING.md
+├── scripts/
+│   └── init.sh
 ├── docker-compose.yml
-├── .env
+├── .env.example
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## Files
-- `docker-compose.yml`: Rundeck service configuration
-- `.env`: Environment variables for Rundeck configuration
-- `README.md`: Project information and instructions
+## Prerequisites
+
+- Docker
+- Docker Compose
+- At least 4GB of free memory
+
+## Quick Start
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and adjust the variables as needed
+3. Run `docker-compose up -d`
+4. Access Rundeck web interface at http://localhost:4440
+5. Log in using the default credentials (admin/admin) and change the password immediately
+
+## Configuration
+
+Refer to the [CONFIGURATION.md](docs/CONFIGURATION.md) file for detailed information on configuring your Rundeck instance.
 
 ## Usage
 
-1. Edit the `.env` file with your desired configuration.
-2. Run the container:
+After starting the Rundeck container, you can:
 
-```bash
-docker-compose up -d
-```
+1. Create projects
+2. Define jobs
+3. Schedule tasks
+4. Monitor executions
 
-3. Access Rundeck at http://localhost:4440 (or the port you specified in the .env file).
+For more detailed usage instructions, please refer to the [official Rundeck documentation](https://docs.rundeck.com/).
 
-4. Check the logs to ensure Rundeck is running correctly:
+## Advanced Configuration
 
-```bash
-docker-compose logs rundeck
-```
-
-You should see output similar to:
-
-```
-rundeck    | Grails application running at http://localhost:4440 in environment: production
-```
-
-## Expected Output
-
-When Rundeck is running correctly, you should see:
-
-1. The Rundeck login page when accessing the web interface.
-2. Log messages indicating successful startup and database initialization.
-3. The ability to log in with the default credentials (admin/admin) unless changed in the configuration.
-4. The output of `docker ps` should show the Rundeck container running. For example:
-
-   ```
-   $ docker ps
-   CONTAINER ID   IMAGE            COMMAND                  CREATED          STATUS          PORTS                               NAMES
-   abc123def456   rundeck/rundeck   "/tini -- /docker-en…"   10 minutes ago   Up 10 minutes   0.0.0.0:4440->4440/tcp            rundeck
-   ```
-
-## Configuration Options
-
-### Basic Options
-- `RUNDECK_GRAILS_URL`: The base URL for Rundeck (e.g., http://localhost:4440)
-- `RUNDECK_SERVER_ADDRESS`: The IP address or hostname Rundeck should bind to
-
-### Common Options
-- `RUNDECK_DATABASE_URL`: JDBC URL for the database
-- `RUNDECK_DATABASE_DRIVER`: Database driver class name
-- `RUNDECK_DATABASE_USERNAME`: Database username
-- `RUNDECK_DATABASE_PASSWORD`: Database password
-
-### Advanced Options
-- `RUNDECK_SECURITY_HTTPHEADERS_ENABLED`: Enable additional HTTP security headers
-- `RUNDECK_SECURITY_CSP_ENABLED`: Enable Content Security Policy
-
-Usage:
-1. Uncomment relevant lines in the `.env` file.
-2. Set desired values.
-3. Restart the container:
-```bash
-docker-compose down && docker-compose up -d
-```
+For advanced configuration options, including custom plugins and external database integration, see the [CONFIGURATION.md](docs/CONFIGURATION.md) file.
 
 ## Data Persistence
-Rundeck data is stored in the volume specified by `RUNDECK_DATADIR` in the `.env` file. This ensures that your projects, jobs, and other configurations persist across container restarts.
 
-## Security Note
-- Change the default admin password immediately after the first login.
-- Use HTTPS in production environments by setting up a reverse proxy with SSL termination.
-- Regularly update the Rundeck image to the latest version to get security patches.
+Rundeck data is persisted using Docker volumes. You can find the volume configuration in the `docker-compose.yml` file.
+
+## Networking
+
+By default, Rundeck is exposed on port 4440. You can modify this in the `docker-compose.yml` file if needed.
+
+## Security Considerations
+
+Please refer to the [SECURITY.md](docs/SECURITY.md) file for important security considerations and best practices.
+
+## Performance Tuning
+
+For tips on optimizing Rundeck performance, see the [PERFORMANCE_TUNING.md](docs/PERFORMANCE_TUNING.md) file.
+
+## Multi-Node Setup
+
+Instructions for setting up a multi-node Rundeck environment can be found in the [MULTI_NODE_SETUP.md](docs/MULTI_NODE_SETUP.md) file.
+
+## Upgrading
+
+For information on upgrading your Rundeck instance, please refer to the [UPGRADING.md](docs/UPGRADING.md) file.
 
 ## Troubleshooting
-Check logs: `docker-compose logs rundeck`
 
-Common issues:
-1. Unable to access Rundeck web interface: Ensure the correct ports are exposed and not blocked by a firewall.
-2. Database connection issues: Verify the database credentials and connection string in the `.env` file.
-
-For more detailed troubleshooting, please refer to the [official Rundeck documentation](https://docs.rundeck.com/docs/administration/maintenance/troubleshooting.html).
+If you encounter any issues, please check the [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) file for common problems and their solutions.
 
 ## Contributing
-Feel free to submit issues, fork the repository and send pull requests!
+
+We welcome contributions! Please see the [CONTRIBUTING.md](docs/CONTRIBUTING.md) file for details on how to contribute to this project.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This Docker setup is not officially supported by Rundeck. Use at your own risk.

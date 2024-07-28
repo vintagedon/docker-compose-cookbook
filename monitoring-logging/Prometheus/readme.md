@@ -1,109 +1,129 @@
 # Prometheus Docker Setup
 
-This project contains a Docker Compose file and environment configuration for setting up a Prometheus monitoring system in a Docker container. It includes both basic and advanced configuration options for customizing your Prometheus deployment.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Prometheus](https://prometheus.io/) is an open-source systems monitoring and alerting toolkit. It collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.
+Prometheus is an open-source systems monitoring and alerting toolkit. It collects and stores its metrics as time series data, i.e. metrics information is stored with the timestamp at which it was recorded, alongside optional key-value pairs called labels.
 
-## GitHub Repository
-https://github.com/vintagedon/docker-compose-cookbook/tree/main/monitoring-logging/Prometheus
+## Table of Contents
 
-## Prerequisites
-- Docker
-- Docker Compose
+- [Prometheus Docker Setup](#prometheus-docker-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Advanced Configuration](#advanced-configuration)
+  - [Data Persistence](#data-persistence)
+  - [Networking](#networking)
+  - [Security Considerations](#security-considerations)
+  - [Performance Tuning](#performance-tuning)
+  - [Multi-Node Setup](#multi-node-setup)
+  - [Upgrading](#upgrading)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Project Structure
+
 ```
 .
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+├── docs/
+│   ├── CONFIGURATION.md
+│   ├── CONTRIBUTING.md
+│   ├── MULTI_NODE_SETUP.md
+│   ├── PERFORMANCE_TUNING.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   └── UPGRADING.md
+├── scripts/
+│   └── prometheus.yml
 ├── docker-compose.yml
-├── .env
-├── prometheus.yml
+├── .env.example
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## Files
-- `docker-compose.yml`: Defines the Prometheus service configuration
-- `.env`: Contains environment variables for configuring the Prometheus instance
-- `prometheus.yml`: The main configuration file for Prometheus
-- `README.md`: Provides information and instructions for the project
+## Prerequisites
+
+- Docker
+- Docker Compose
+- Basic understanding of monitoring concepts
+
+## Quick Start
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and adjust the variables as needed
+3. Run `docker-compose up -d`
+4. Access Prometheus web interface at http://localhost:9090
+
+## Configuration
+
+Prometheus is configured via a YAML file. The main configuration file is located at `scripts/prometheus.yml`. You can modify this file to add or remove targets, change scrape intervals, or configure other Prometheus settings.
+
+For detailed configuration options, please refer to the [official Prometheus documentation](https://prometheus.io/docs/prometheus/latest/configuration/configuration/).
 
 ## Usage
 
-1. Edit the `.env` file and replace the placeholder values with your desired configuration.
+After starting the Prometheus container, you can:
 
-2. Modify the `prometheus.yml` file to include your specific scrape configs and alerting rules.
+1. Access the Prometheus web interface at http://localhost:9090
+2. Use the PromQL language to query metrics
+3. Set up alerts based on metric thresholds
+4. Integrate with visualization tools like Grafana for better data representation
 
-3. Run the container using Docker Compose:
-   ```
-   docker-compose up -d
-   ```
+For more information on using Prometheus, check the [official documentation](https://prometheus.io/docs/prometheus/latest/getting_started/).
 
-4. Access the Prometheus web interface at `http://localhost:9090` (replace `localhost` with your server's IP if needed).
+## Advanced Configuration
 
-## Configuration Options
-
-### Basic Options
-
-- `PROMETHEUS_CONTAINER_NAME`: Name of the Prometheus container
-- `PROMETHEUS_CONFIG_DIR`: Directory for Prometheus configuration files
-- `PROMETHEUS_DATA_DIR`: Directory for Prometheus data storage
-- `PROMETHEUS_PORT`: Port for the Prometheus web interface
-
-### Common Options
-
-- `PROMETHEUS_RETENTION_TIME`: How long to retain metrics data
-- `PROMETHEUS_SCRAPE_INTERVAL`: How frequently to scrape targets
-- `PROMETHEUS_EVALUATION_INTERVAL`: How frequently to evaluate rules
-
-### Advanced Options
-
-- `PROMETHEUS_WEB_EXTERNAL_URL`: The URL under which Prometheus is externally reachable
-- `PROMETHEUS_WEB_ROUTE_PREFIX`: A path prefix for the web interface
-- `PROMETHEUS_LOG_LEVEL`: The log level for Prometheus (debug, info, warn, error)
-- `PROMETHEUS_STORAGE_TSDB_PATH`: Path of the TSDB storage
-- `PROMETHEUS_ALERTMANAGER_URL`: URL of the Alertmanager to send notifications to
-- `PROMETHEUS_QUERY_MAX_SAMPLES`: Maximum number of samples a single query can load into memory
-
-To use these options:
-
-1. Uncomment the relevant lines in the `.env` file.
-2. Set your desired values.
-3. Restart the Prometheus container for the changes to take effect:
-   ```
-   docker-compose down
-   docker-compose up -d
-   ```
-
-## Accessing Prometheus
-The Prometheus web interface is accessible at `http://localhost:9090` (replace `localhost` with your server's IP if needed). From here, you can:
-- View and graph metrics
-- Explore the status of scrape targets
-- Use the PromQL query language to analyze your metrics
+For advanced configuration options, including setting up alerting rules, configuring remote storage, and integrating with other systems, please refer to the `docs/CONFIGURATION.md` file.
 
 ## Data Persistence
-Prometheus data is stored in the directory specified by `PROMETHEUS_DATA_DIR`. Ensure this path exists on your host system and has appropriate permissions.
 
-## Security Note
-While this setup provides a good starting point, additional security measures should be implemented for production use, including:
-- Setting up authentication for the Prometheus web interface
-- Using HTTPS for secure communication
-- Implementing proper firewall rules
-- Regularly updating Prometheus and its dependencies
-- Limiting access to the Prometheus API
+Prometheus data is persisted in a Docker volume. This ensures that your metrics data survives container restarts. The volume is defined in the `docker-compose.yml` file.
+
+## Networking
+
+By default, Prometheus exposes its web interface on port 9090. You can change this in the `docker-compose.yml` file if needed. Make sure to update your firewall rules accordingly if you're running this setup in a production environment.
+
+## Security Considerations
+
+Please refer to the `docs/SECURITY.md` file for important security considerations when running Prometheus in a Docker container, including:
+
+- Access control
+- Encryption in transit
+- Secure scraping endpoints
+
+## Performance Tuning
+
+For information on optimizing Prometheus performance, including storage tuning, query optimization, and resource allocation, please see the `docs/PERFORMANCE_TUNING.md` file.
+
+## Multi-Node Setup
+
+For instructions on setting up Prometheus in a multi-node environment, including high availability configurations, please refer to the `docs/MULTI_NODE_SETUP.md` file.
+
+## Upgrading
+
+For guidelines on upgrading Prometheus to newer versions, please see the `docs/UPGRADING.md` file.
 
 ## Troubleshooting
-If you encounter issues, check the Prometheus logs using:
-```
-docker-compose logs prometheus
-```
 
-Common issues:
-1. Configuration errors: Check your `prometheus.yml` file for syntax errors or misconfigurations.
-2. Scrape failures: Verify that your targets are reachable and correctly configured.
-3. Storage issues: Ensure that the data directory has sufficient disk space and proper permissions.
-4. Resource constraints: Monitor CPU and memory usage, and adjust resources if needed.
+If you encounter any issues, please check the `docs/TROUBLESHOOTING.md` file for common problems and their solutions.
 
 ## Contributing
-Please feel free to submit issues, fork the repository and send pull requests!
+
+We welcome contributions! Please see the `docs/CONTRIBUTING.md` file for details on how to contribute to this project.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This Docker setup is not officially supported by the Prometheus project. Use at your own risk.

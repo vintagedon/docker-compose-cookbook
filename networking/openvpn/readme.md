@@ -1,123 +1,128 @@
 # OpenVPN Docker Setup
 
-This project contains a Docker Compose file and environment configuration for setting up an OpenVPN server in a Docker container. It includes both basic and advanced configuration options for customizing your OpenVPN deployment.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[OpenVPN](https://openvpn.net/) is a full-featured open source SSL VPN solution that accommodates a wide range of configurations, including remote access, site-to-site VPNs, Wi-Fi security, and enterprise-scale remote access solutions with load balancing.
+OpenVPN is an open-source virtual private network (VPN) system that implements techniques to create secure point-to-point or site-to-site connections in routed or bridged configurations. This Docker setup provides an easy way to deploy and manage an OpenVPN server.
 
-## GitHub Repository
-[https://github.com/vintagedon/docker-compose-cookbook](https://github.com/vintagedon/docker-compose-cookbook)
+## Table of Contents
 
-## Prerequisites
-- Docker
-- Docker Compose
+- [OpenVPN Docker Setup](#openvpn-docker-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Advanced Configuration](#advanced-configuration)
+  - [Data Persistence](#data-persistence)
+  - [Networking](#networking)
+  - [Security Considerations](#security-considerations)
+  - [Performance Tuning](#performance-tuning)
+  - [Multi-Node Setup](#multi-node-setup)
+  - [Upgrading](#upgrading)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Project Structure
+
 ```
 .
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+├── docs/
+│   ├── CONFIGURATION.md
+│   ├── CONTRIBUTING.md
+│   ├── MULTI_NODE_SETUP.md
+│   ├── PERFORMANCE_TUNING.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   └── UPGRADING.md
+├── scripts/
+│   └── init.sh
 ├── docker-compose.yml
-├── .env
+├── .env.example
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## Files
-- `docker-compose.yml`: Defines the OpenVPN service configuration
-- `.env`: Contains environment variables for configuring the OpenVPN instance
-- `README.md`: Provides information and instructions for the project
+## Prerequisites
+
+- Docker
+- Docker Compose
+- Basic understanding of networking and VPNs
+
+## Quick Start
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and adjust the variables as needed
+3. Run `docker-compose up -d`
+4. Use the provided scripts to generate client configurations
+
+For detailed instructions, refer to the [Configuration](#configuration) section.
+
+## Configuration
+
+For detailed configuration options, please refer to the [CONFIGURATION.md](docs/CONFIGURATION.md) file.
 
 ## Usage
 
-1. Edit the `.env` file and replace the placeholder values with your desired configuration. 
-
-2. Initialize the OpenVPN configuration:
-   ```
-   docker-compose run --rm openvpn ovpn_genconfig -u udp://your_server_domain_or_ip
-   docker-compose run --rm openvpn ovpn_initpki
-   ```
-   Follow the prompts to set up your PKI (Public Key Infrastructure).
-
-3. Run the container using Docker Compose:
+1. Start the OpenVPN server:
    ```
    docker-compose up -d
    ```
-
-## Configuration Options
-
-### Basic Options
-
-- `OPENVPN_CONTAINER_NAME`: Name of the OpenVPN container
-- `OPENVPN_PORT`: Port for OpenVPN to listen on
-- `OPENVPN_PROTO`: Protocol for OpenVPN (udp or tcp)
-- `OPENVPN_CONFIG_DIR`: Directory for OpenVPN configuration files
-- `OPENVPN_DATA_DIR`: Directory for OpenVPN data
-- `OPENVPN_SERVERNAME`: Name of the OpenVPN server
-
-### Common Options
-
-- `OPENVPN_DNS1` and `OPENVPN_DNS2`: Set the DNS servers for VPN clients
-- `OPENVPN_CIPHER`: Set the cipher for data channel packets
-- `OPENVPN_AUTH`: Set the authentication algorithm
-- `OPENVPN_VERB`: Set the verbosity level of OpenVPN's logs (0-9)
-- `OPENVPN_CLIENT_TO_CLIENT`: Enable or disable client-to-client communication
-- `OPENVPN_MAX_CLIENTS`: Set the maximum number of concurrent clients
-
-### Advanced Options
-
-- `OPENVPN_PUSH`: Set additional push options (e.g., routes)
-- `OPENVPN_TLS_VERSION_MIN`: Set the minimum TLS version
-- `OPENVPN_TLS_CIPHER`: Set the TLS cipher
-- `OPENVPN_DUPLICATE_CN`: Allow duplicate Common Names
-- `OPENVPN_KEEPALIVE`: Set keepalive parameters
-- `OPENVPN_RENEG_SEC`: Set renegotiation time in seconds
-- `OPENVPN_COMP_LZO`: Set compression algorithm
-- `OPENVPN_REMOTE_CERT_TLS`: Require specific key usage and extended key usage for peer certificate
-- `OPENVPN_USER` and `OPENVPN_GROUP`: Set the user and group for the OpenVPN daemon
-
-To use these options:
-
-1. Uncomment the relevant lines in the `.env` file.
-2. Set your desired values.
-3. Restart the OpenVPN container for the changes to take effect:
+2. Generate a client configuration:
    ```
-   docker-compose down
-   docker-compose up -d
+   docker-compose run --rm openvpn easyrsa build-client-full CLIENT_NAME nopass
+   docker-compose run --rm openvpn ovpn_getclient CLIENT_NAME > CLIENT_NAME.ovpn
    ```
+3. Distribute the `.ovpn` file to your client securely
+4. Connect to the VPN using the generated `.ovpn` file
 
-Note: Some changes may require regenerating the OpenVPN configuration. If you make significant changes, you may need to re-run the `ovpn_genconfig` command with appropriate options.
+## Advanced Configuration
 
-## Generating Client Certificates
-To generate a client certificate, use the following command:
-```
-docker-compose run --rm openvpn easyrsa build-client-full CLIENT_NAME nopass
-```
-Replace CLIENT_NAME with the desired name for the client.
-
-To retrieve the client configuration, use:
-```
-docker-compose run --rm openvpn ovpn_getclient CLIENT_NAME > CLIENT_NAME.ovpn
-```
-
-## Accessing OpenVPN
-Clients can connect to the OpenVPN server using the generated .ovpn file and an OpenVPN client application.
+For advanced configuration options, including server settings and routing, please refer to the [CONFIGURATION.md](docs/CONFIGURATION.md) file.
 
 ## Data Persistence
-OpenVPN configuration and data are stored in the directories specified by `OPENVPN_CONFIG_DIR` and `OPENVPN_DATA_DIR`. Ensure these paths exist on your host system and have appropriate permissions.
 
-## Security Note
-While this setup provides a good starting point, additional security measures should be implemented for production use, including:
-- Keeping the OpenVPN server and clients updated
-- Using strong authentication methods
-- Implementing proper firewall rules
-- Regularly auditing access logs
-- Considering the use of perfect forward secrecy (PFS) in your OpenVPN configuration
+OpenVPN configuration and certificates are stored in a Docker volume. Ensure to back up this volume regularly.
+
+## Networking
+
+By default, the OpenVPN server uses UDP port 1194. Ensure this port is open and forwarded to the Docker host if running behind a NAT.
+
+## Security Considerations
+
+For important security considerations and best practices, please refer to the [SECURITY.md](docs/SECURITY.md) file.
+
+## Performance Tuning
+
+For tips on optimizing OpenVPN performance, please refer to the [PERFORMANCE_TUNING.md](docs/PERFORMANCE_TUNING.md) file.
+
+## Multi-Node Setup
+
+For information on setting up OpenVPN in a multi-node environment, please refer to the [MULTI_NODE_SETUP.md](docs/MULTI_NODE_SETUP.md) file.
+
+## Upgrading
+
+For instructions on upgrading your OpenVPN Docker setup, please refer to the [UPGRADING.md](docs/UPGRADING.md) file.
 
 ## Troubleshooting
-If you encounter issues, check the OpenVPN logs using:
-```
-docker-compose logs openvpn
-```
+
+For common issues and their solutions, please refer to the [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) file.
 
 ## Contributing
-Please refer to the repository's contributing guidelines for information on how to contribute to this project.
+
+We welcome contributions! Please see the [CONTRIBUTING.md](docs/CONTRIBUTING.md) file for details.
 
 ## License
-This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This setup is provided as-is, without any guarantees or warranty. Use at your own risk.

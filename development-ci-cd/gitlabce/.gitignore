@@ -1,0 +1,89 @@
+# GitLab CE Docker .gitignore
+
+# Ignore .env file containing sensitive information
+.env
+
+# Ignore Docker volumes
+/gitlab/config/*
+/gitlab/data/*
+/gitlab/logs/*
+
+# Ignore backup files
+*.tar
+*.tar.gz
+*.bak
+
+# Ignore temporary files
+*.tmp
+*.swp
+*.swo
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor files
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
+
+# Ignore log files
+*.log
+
+# Ignore compiled binaries
+*.com
+*.class
+*.dll
+*.exe
+*.o
+*.so
+
+# Ignore packaged files
+*.7z
+*.dmg
+*.gz
+*.iso
+*.jar
+*.rar
+*.tar
+*.zip
+
+# Ignore private keys
+*.pem
+*.key
+
+# Ignore GitLab Runner configs
+config.toml
+
+# Ignore custom scripts (if any)
+/scripts/*
+!/scripts/init.sh
+
+# Ignore any local documentation files
+/docs/local/
+
+# Ignore node modules (if using any Node.js tools)
+node_modules/
+
+# Ignore Python virtual environments (if using any Python tools)
+venv/
+*.pyc
+__pycache__/
+
+# Ignore Ruby specific files (if using any Ruby tools)
+*.gem
+*.rbc
+/.config
+/coverage/
+/InstalledFiles
+/pkg/
+/spec/reports/
+/spec/examples.txt
+/test/tmp/
+/test/version_tmp/
+/tmp/
+
+# Ignore specific to your GitLab setup (add as needed)
+# custom_config.rb
+# custom_init_script.sh

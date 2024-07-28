@@ -1,0 +1,58 @@
+# Wireguard Docker Setup .gitignore
+
+# Environment variables
+.env
+
+# Wireguard configuration files
+config/*
+!config/.gitkeep
+
+# Docker volumes
+volume/*
+!volume/.gitkeep
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Editor directories and files
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
+*.swp
+*.swo
+
+# Node modules (if using any Node.js tools)
+node_modules/
+
+# Python virtual environment (if using any Python tools)
+venv/
+*.pyc
+__pycache__/
+
+# Backup files
+*~
+*.bak
+*.backup
+
+# Build output
+/dist
+/build
+
+# Dependency directories
+/vendor/
+/lib/

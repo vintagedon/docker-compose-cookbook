@@ -1,140 +1,131 @@
 # GitLab CE Docker Setup
 
-This project contains a Docker Compose setup for GitLab CE (Community Edition), including basic and advanced configuration options.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-GitLab CE is a complete DevOps platform that enables professionals to perform all the tasks in a project—from project planning and source code management to monitoring and security. It provides source code management, issue tracking, CI/CD pipeline features, and more.
+GitLab CE (Community Edition) is an open-source end-to-end software development platform with built-in version control, issue tracking, code review, CI/CD, and more. This Docker setup provides an easy way to get started with GitLab CE in a containerized environment.
 
-**Disclaimer:** This setup is based on general best practices and may not reflect the most current configuration options or requirements for GitLab CE. Always refer to the [official GitLab documentation](https://docs.gitlab.com/ee/install/docker.html) for the most up-to-date and accurate information.
+## Table of Contents
 
-## GitHub Repository
-
-https://github.com/vintagedon/docker-compose-cookbook/development-ci-cd/gitlabce
-
-## Prerequisites
-
-- Docker
-- Docker Compose
-- At least 4GB of free RAM (8GB recommended)
-- At least 2 CPU cores
+- [GitLab CE Docker Setup](#gitlab-ce-docker-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Advanced Configuration](#advanced-configuration)
+  - [Data Persistence](#data-persistence)
+  - [Networking](#networking)
+  - [Security Considerations](#security-considerations)
+  - [Performance Tuning](#performance-tuning)
+  - [Multi-Node Setup](#multi-node-setup)
+  - [Upgrading](#upgrading)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Project Structure
 
 ```
 .
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+├── docs/
+│   ├── CONFIGURATION.md
+│   ├── CONTRIBUTING.md
+│   ├── MULTI_NODE_SETUP.md
+│   ├── PERFORMANCE_TUNING.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   └── UPGRADING.md
+├── scripts/
+│   └── init.sh
 ├── docker-compose.yml
-├── .env
+├── .env.example
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## Files
-- `docker-compose.yml`: GitLab CE service configuration
-- `.env`: Environment variables for GitLab CE configuration
-- `README.md`: Project information and instructions
+## Prerequisites
+
+- Docker
+- Docker Compose
+- At least 4GB of free memory
+- At least 2 CPU cores
+
+## Quick Start
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and adjust the variables as needed
+3. Run `docker-compose up -d`
+4. Access GitLab at http://localhost:8080 (or the port you configured)
+5. Set the root password on first login
+
+## Configuration
+
+See [CONFIGURATION.md](docs/CONFIGURATION.md) for detailed configuration options.
 
 ## Usage
 
-1. Edit the `.env` file with your desired configuration.
-2. Run the container:
+After starting the GitLab container, you can:
 
-```bash
-docker-compose up -d
-```
+1. Create projects and manage your code repositories
+2. Configure CI/CD pipelines
+3. Manage issues and merge requests
+4. Collaborate with team members
 
-3. Access GitLab CE at `http://localhost:8080` (or the port you specified).
+For more information on using GitLab, refer to the [official GitLab documentation](https://docs.gitlab.com/).
 
-4. Check the logs to ensure GitLab CE is running correctly:
+## Advanced Configuration
 
-```bash
-docker-compose logs gitlab
-```
+For advanced configuration options, including:
 
-You should see output similar to:
+- SSL setup
+- LDAP integration
+- Custom GitLab configurations
 
-```
-gitlab_1  | ================================================================================
-gitlab_1  | GitLab is taking longer than expected to start up.
-gitlab_1  | Please check the logs using: docker logs -f gitlab
-gitlab_1  | 
-gitlab_1  | For more information see:
-gitlab_1  | https://docs.gitlab.com/omnibus/settings/logs.html
-gitlab_1  | ================================================================================
-gitlab_1  | gitlab Reconfigured!
-```
-
-## Expected Output
-
-When GitLab CE is running correctly, you should see:
-
-1. The GitLab CE container running without any error messages in the logs.
-2. The GitLab web interface accessible at the configured URL.
-3. Ability to create a new account or log in with the root account.
-4. The output of `docker ps` should show the GitLab CE container running. For example:
-
-   ```
-   $ docker ps
-   CONTAINER ID   IMAGE                     COMMAND             CREATED          STATUS                    PORTS                                                 NAMES
-   abc123def456   gitlab/gitlab-ce:latest   "/assets/wrapper"   10 minutes ago   Up 10 minutes (healthy)   0.0.0.0:22->22/tcp, 0.0.0.0:8080->80/tcp, 443/tcp     gitlab
-   ```
-
-## Configuration Options
-
-### Basic Options
-
-- `GITLAB_HOME`: Directory where GitLab data will be stored
-- `GITLAB_EXTERNAL_URL`: The URL where your GitLab CE instance will be accessible
-
-### Common Options
-
-- `GITLAB_ROOT_PASSWORD`: Initial password for the root user
-- `GITLAB_INCOMING_EMAIL_ADDRESS`: Email address for incoming emails
-- `SMTP_ENABLED`: Enable/disable SMTP
-- `SMTP_HOST`: SMTP server hostname
-
-### Advanced Options
-
-- `GITLAB_OMNIBUS_CONFIG`: Additional GitLab configuration options
-- `GITLAB_PAGES_ENABLED`: Enable/disable GitLab Pages
-
-Usage:
-
-1. Uncomment relevant lines in the `.env` file.
-2. Set desired values.
-3. Restart the container:
-
-```bash
-docker-compose down && docker-compose up -d
-```
+See [CONFIGURATION.md](docs/CONFIGURATION.md).
 
 ## Data Persistence
 
-GitLab CE data is stored in the directory specified by `GITLAB_HOME` in the `.env` file. This includes repositories, database, and configuration files. Ensure this directory is backed up regularly.
+GitLab data is persisted using Docker volumes. Ensure regular backups of these volumes to prevent data loss.
 
 ## Networking
 
-The GitLab CE container is connected to a Docker network named `gitlab_network`. This network can be used to connect other services that need to interact with GitLab.
+By default, GitLab is accessible on port 8080. You can modify this in the `.env` file or `docker-compose.yml`.
 
-## Security Note
+## Security Considerations
 
-- Change the root password immediately after the first login.
-- Use HTTPS in production environments.
-- Regularly update the GitLab CE image to get the latest security patches.
-- Restrict access to the Docker host machine.
+Refer to [SECURITY.md](docs/SECURITY.md) for important security considerations and best practices.
+
+## Performance Tuning
+
+For performance optimization tips, see [PERFORMANCE_TUNING.md](docs/PERFORMANCE_TUNING.md).
+
+## Multi-Node Setup
+
+For scaling GitLab across multiple nodes, refer to [MULTI_NODE_SETUP.md](docs/MULTI_NODE_SETUP.md).
+
+## Upgrading
+
+For upgrade instructions, see [UPGRADING.md](docs/UPGRADING.md).
 
 ## Troubleshooting
 
-Check logs: `docker-compose logs gitlab`
-
-Common issues:
-
-1. GitLab takes too long to start: This is normal for the first run. Wait for at least 5 minutes.
-2. "Permission denied" errors: Ensure the `GITLAB_HOME` directory has the correct permissions.
-
-For more detailed troubleshooting, please refer to the [official GitLab documentation](https://docs.gitlab.com/ee/administration/troubleshooting/).
+If you encounter issues, check [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common problems and solutions.
 
 ## Contributing
 
-Feel free to submit issues, fork the repository and send pull requests!
+We welcome contributions! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for details on how to contribute to this project.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This Docker setup is community-maintained and not officially supported by GitLab. Use at your own risk.

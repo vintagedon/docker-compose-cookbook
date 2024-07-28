@@ -1,0 +1,28 @@
+# .gitignore for Gitea-SQLite3 Docker Setup
+
+# Environment variables
+.env
+
+# Logs
+*.log
+
+# Docker volumes
+/data
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.bak
+
+# Ignore all .env files except .env.example
+.env*
+!.env.example

@@ -1,0 +1,44 @@
+# .gitignore for SoftEther VPN Docker Setup
+
+# Environment variables
+.env
+
+# Docker volumes
+volumes/
+
+# Logs
+*.log
+
+# Temporary files
+*.tmp
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Backup files
+*.bak
+*.backup
+
+# SoftEther VPN specific files
+*.vpn
+
+# Scripts with sensitive information
+*_sensitive.sh
+
+# Compiled Python files
+*.pyc
+
+# Node modules (if using any Node.js tools)
+node_modules/
+
+# Terraform files (if using Terraform for infrastructure)
+*.tfstate
+*.tfstate.backup
+.terraform/

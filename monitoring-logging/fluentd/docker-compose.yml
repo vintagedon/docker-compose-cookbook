@@ -1,0 +1,37 @@
+version: "3.8"
+
+services:
+  fluentd:
+    image: fluent/fluentd:${FLUENTD_VERSION:-v1.14}
+    container_name: ${CONTAINER_NAME:-fluentd}
+    ports:
+      - "${FLUENTD_PORT:-24224}:24224"
+      - "${FLUENTD_PORT:-24224}:24224/udp"
+    volumes:
+      - fluentd_data:/fluentd/log
+      - ./scripts/init.conf:/fluentd/etc/fluent.conf
+      - /path/to/cacti/logs:/cacti/logs:ro
+      - /path/to/mysql/logs:/mysql/logs:ro
+    environment:
+      - FLUENTD_CONF=fluent.conf
+      - TZ=${TIMEZONE:-UTC}
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "5"
+    healthcheck:
+      test:
+        ["CMD", "fluentd", "--dry-run", "--config", "/fluentd/etc/fluent.conf"]
+      interval: 60s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  fluentd_data:
+
+networks:
+  default:
+    name: fluentd_network
+    external: true

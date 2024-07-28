@@ -1,0 +1,9 @@
+# Custom domain list for Pi-hole
+# Format: domain.com
+
+# Example domains (remove or replace these with your own):
+example-ad-domain.com
+tracking-domain.net
+unwanted-site.org
+
+# Add your custom domains below:

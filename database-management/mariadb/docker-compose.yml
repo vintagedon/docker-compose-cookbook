@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  mariadb:
+    container_name: ${CONTAINER_NAME:-mariadb}
+    image: mariadb:${MARIADB_VERSION:-10.6}
+    ports:
+      - "${PORT:-3306}:3306"
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? mariadb_named_data:/var/lib/mysql: mariadb_data:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    restart: unless-stopped
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "mysqladmin",
+          "ping",
+          "-h",
+          "localhost",
+          "-u",
+          "root",
+          "-p${MYSQL_ROOT_PASSWORD}",
+        ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mariadb_data:
+  mariadb_named_data:
+    name: mariadb_named_data
+
+networks:
+  default:
+    name: mariadb_network

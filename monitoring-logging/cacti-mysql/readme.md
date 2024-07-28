@@ -1,117 +1,117 @@
-# Cacti-MySQL Docker Setup
+# Cacti with MySQL Docker Setup
 
-This project contains a Docker Compose setup for Cacti with MySQL, including basic and advanced configuration options.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Cacti is an open-source, web-based network monitoring and graphing tool designed as a frontend application for RRDtool's data storage and graphing functionality. It allows you to collect and visualize time-series data from various networked devices. This setup includes a MySQL database for Cacti's data storage.
+Cacti is a comprehensive network monitoring and graphing tool designed to harness the power of RRDTool's data storage and graphing functionality. This Docker setup includes Cacti along with MySQL for database management, providing a robust solution for monitoring and logging network performance.
 
-## GitHub Repository
+## Table of Contents
 
-https://github.com/vintagedon/docker-compose-cookbook/monitoring-logging/cacti-mysql
-
-## Prerequisites
-
-- Docker
-- Docker Compose
+- [Cacti with MySQL Docker Setup](#cacti-with-mysql-docker-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Advanced Configuration](#advanced-configuration)
+  - [Data Persistence](#data-persistence)
+  - [Networking](#networking)
+  - [Security Considerations](#security-considerations)
+  - [Performance Tuning](#performance-tuning)
+  - [Multi-Node Setup](#multi-node-setup)
+  - [Upgrading](#upgrading)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Project Structure
 
 ```
 .
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+├── docs/
+│   ├── CONFIGURATION.md
+│   ├── CONTRIBUTING.md
+│   ├── MULTI_NODE_SETUP.md
+│   ├── PERFORMANCE_TUNING.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   └── UPGRADING.md
+├── scripts/
+│   └── init.sql
 ├── docker-compose.yml
-├── .env
+├── .env.example
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## Files
-- `docker-compose.yml`: Cacti and MySQL service configuration
-- `.env`: Environment variables for Cacti and MySQL configuration
-- `README.md`: Project information and instructions
+## Prerequisites
+
+- Docker
+- Docker Compose
+- At least 2GB of free memory
+
+## Quick Start
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and adjust the variables as needed
+3. Run `docker-compose up -d`
+4. Access Cacti web interface at http://localhost:80
+5. Log in using the default credentials (admin/admin) and set a new password
+
+## Configuration
+
+See [CONFIGURATION.md](docs/CONFIGURATION.md) for detailed information on configuring Cacti and MySQL for optimal monitoring and logging performance.
 
 ## Usage
 
-1. Edit the `.env` file with your desired configuration.
-2. Run the containers:
+After starting the containers, you can access the Cacti web interface to set up your network monitoring and logging tasks. Cacti provides a wide range of features for collecting, storing, and visualizing network performance data.
 
-```bash
-docker-compose up -d
-```
+## Advanced Configuration
 
-3. Access Cacti at http://your-host-ip:80 (or the port you've configured).
-
-4. Check the logs to ensure Cacti is running correctly:
-
-```bash
-docker-compose logs cacti
-```
-
-You should see output similar to:
-
-```
-[httpd] Starting Apache web server...
-[cacti] Initializing Cacti database...
-[cacti] Cacti initialization complete. Starting cron service...
-```
-
-## Expected Output
-
-When Cacti is running correctly, you should see:
-
-1. The Cacti login page when accessing the web interface.
-2. Successful database connection messages in the logs.
-3. Periodic polling messages in the logs as Cacti collects data.
-4. The output of `docker ps` should show both the Cacti and MySQL containers running. For example:
-
-   ```
-   $ docker ps
-   CONTAINER ID   IMAGE                 COMMAND                  CREATED          STATUS          PORTS                               NAMES
-   abc123def456   cacti/cacti:latest   "/entrypoint.sh"         10 minutes ago   Up 10 minutes   0.0.0.0:80->80/tcp                  cacti-mysql_cacti_1
-   789ghi101112   mysql:5.7            "docker-entrypoint.s…"   10 minutes ago   Up 10 minutes   3306/tcp, 33060/tcp                 cacti-mysql_db_1
-   ```
-
-## Configuration Options
-
-### Basic Options
-- `MYSQL_HOST`: MySQL host (default: db)
-- `MYSQL_PORT`: MySQL port (default: 3306)
-
-### Common Options
-- `CACTI_URL`: The URL where Cacti will be accessible
-- `CACTI_CSRF_SECRET`: A secret key for CSRF protection
-- `TZ`: Time zone for the containers
-
-### Advanced Options
-- `RDB_OPTIMIZATION`: Enable RRDtool optimization (default: 1)
-- `SPINE_THREADS`: Number of threads for Spine poller (default: 10)
-
-Usage:
-1. Uncomment relevant lines in the `.env` file.
-2. Set desired values.
-3. Restart the containers:
-```bash
-docker-compose down && docker-compose up -d
-```
+For advanced configuration options, including setting up custom data sources and graph templates, refer to [CONFIGURATION.md](docs/CONFIGURATION.md).
 
 ## Data Persistence
-Data is stored in the configured volumes. Ensure to back up these directories regularly:
-- `./cacti`: Main Cacti application files
-- `./rra`: RRD files for storing and graphing data
-- `./mysql`: MySQL database files
 
-## Security Note
-- Always change the default admin password after initial setup.
-- Use a strong `CACTI_CSRF_SECRET` to prevent CSRF attacks.
-- Consider using HTTPS with a reverse proxy for secure access.
-- Regularly update Cacti and MySQL to the latest versions to patch security vulnerabilities.
+Monitoring and logging data is persisted through Docker volumes. See docker-compose.yml for volume configurations.
+
+## Networking
+
+By default, the Cacti web interface is exposed on port 80. MySQL is not exposed externally for security reasons.
+
+## Security Considerations
+
+Refer to [SECURITY.md](docs/SECURITY.md) for important security information and best practices for securing your monitoring and logging setup.
+
+## Performance Tuning
+
+For performance tuning tips specific to monitoring and logging workloads, see [PERFORMANCE_TUNING.md](docs/PERFORMANCE_TUNING.md).
+
+## Multi-Node Setup
+
+Information on setting up Cacti in a multi-node environment for distributed monitoring and logging can be found in [MULTI_NODE_SETUP.md](docs/MULTI_NODE_SETUP.md).
+
+## Upgrading
+
+For upgrade instructions specific to this monitoring and logging setup, refer to [UPGRADING.md](docs/UPGRADING.md).
 
 ## Troubleshooting
-Check logs: `docker-compose logs cacti` or `docker-compose logs db`
 
-Common issues:
-1. Database connection errors: Ensure MySQL is running and accessible.
-2. Permissions issues: Check that the Cacti container has proper permissions for its volumes.
+If you encounter issues with your monitoring or logging setup, check [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common problems and solutions.
 
 ## Contributing
-Feel free to submit issues, fork the repository and send pull requests!
+
+We welcome contributions to improve this monitoring and logging setup! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for details on how to contribute.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This is an unofficial Docker setup for Cacti. While we strive to maintain best practices for monitoring and logging, please use it at your own risk and refer to the official Cacti documentation for authoritative information.

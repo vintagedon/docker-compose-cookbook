@@ -1,0 +1,41 @@
+version: "3.8"
+
+services:
+  neo4j:
+    image: neo4j:${NEO4J_VERSION:-latest}
+    container_name: ${CONTAINER_NAME:-neo4j}
+    ports:
+      - "${NEO4J_HTTP_PORT:-7474}:7474"
+      - "${NEO4J_HTTPS_PORT:-7473}:7473"
+      - "${NEO4J_BOLT_PORT:-7687}:7687"
+    volumes:
+      - neo4j_data:/data
+      - neo4j_logs:/logs
+      - neo4j_import:/var/lib/neo4j/import
+      - neo4j_plugins:/plugins
+      - ./scripts/init.cypher:/var/lib/neo4j/import/init.cypher
+    environment:
+      - NEO4J_AUTH=${NEO4J_AUTH:-neo4j/neo4j}
+      - NEO4J_dbms_memory_heap_initial__size=${NEO4J_HEAP_MEMORY:-512M}
+      - NEO4J_dbms_memory_heap_max__size=${NEO4J_MAX_HEAP:-2G}
+      - NEO4J_dbms_memory_pagecache_size=${NEO4J_PAGECACHE:-512M}
+      - NEO4J_apoc_export_file_enabled=${APOC_EXPORT_ENABLED:-true}
+      - NEO4J_apoc_import_file_enabled=${APOC_IMPORT_ENABLED:-true}
+      - NEO4J_apoc_import_file_use__neo4j__config=${APOC_IMPORT_USE_NEO4J_CONFIG:-true}
+      - NEO4J_dbms_security_procedures_unrestricted=${UNRESTRICTED_PROCEDURES:-apoc.*}
+    healthcheck:
+      test: ["CMD-SHELL", "neo4j status"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  neo4j_data:
+  neo4j_logs:
+  neo4j_import:
+  neo4j_plugins:
+
+networks:
+  default:
+    name: neo4j_network

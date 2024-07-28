@@ -1,0 +1,48 @@
+version: "3.8"
+
+services:
+  cacti:
+    image: smcline06/cacti:${CACTI_VERSION:-latest}
+    container_name: ${CONTAINER_NAME:-cacti}
+    ports:
+      - "${CACTI_PORT:-80}:80"
+    volumes:
+      - cacti_data:/cacti
+      - cacti_rra:/var/www/html/rra
+      - cacti_logs:/var/www/html/log
+    environment:
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_NAME=${MYSQL_DATABASE:-cacti}
+      - DB_USER=${MYSQL_USER:-cactiuser}
+      - DB_PASS=${MYSQL_PASSWORD:-cactipassword}
+      - INITIALIZE_DB=1
+      - TZ=${TIMEZONE:-UTC}
+    depends_on:
+      - mysql
+    restart: unless-stopped
+
+  mysql:
+    image: mysql:${MYSQL_VERSION:-8.0}
+    container_name: cacti-mysql
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD:-rootpassword}
+      - MYSQL_DATABASE=${MYSQL_DATABASE:-cacti}
+      - MYSQL_USER=${MYSQL_USER:-cactiuser}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD:-cactipassword}
+      - TZ=${TIMEZONE:-UTC}
+    command: --default-authentication-plugin=mysql_native_password
+    restart: unless-stopped
+
+volumes:
+  cacti_data:
+  cacti_rra:
+  cacti_logs:
+  mysql_data:
+
+networks:
+  default:
+    name: cacti_monitoring_network

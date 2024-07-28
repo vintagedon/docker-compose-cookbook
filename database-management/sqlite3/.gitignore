@@ -1,0 +1,53 @@
+# SQLite3 Docker Setup .gitignore
+
+# Environment variables
+.env
+
+# SQLite database files
+*.sqlite
+*.sqlite3
+*.db
+
+# Logs
+*.log
+
+# Docker
+.docker
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Editor Files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temporary files
+*.tmp
+*.temp
+
+# Backup files
+*.bak
+*~
+
+# Build output
+/build
+/dist
+
+# Dependency directories
+/node_modules
+/vendor
+
+# Compiled Python files
+*.pyc
+__pycache__/
+
+# Compiled C++ files
+*.out
+
+# Other files and folders to ignore
+*.pid
+*.seed
+*.pid.lock

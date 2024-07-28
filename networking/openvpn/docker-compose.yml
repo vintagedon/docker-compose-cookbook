@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  openvpn:
+    image: kylemanna/openvpn:${OPENVPN_VERSION:-latest}
+    container_name: ${CONTAINER_NAME:-openvpn}
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - "${OPENVPN_PORT:-1194}:1194/udp"
+    volumes:
+      - openvpn_data:/etc/openvpn
+    environment:
+      - EASYRSA_KEY_SIZE=${KEY_SIZE:-2048}
+      - EASYRSA_CERT_EXPIRE=${CERT_EXPIRE:-3650}
+      - EASYRSA_CA_EXPIRE=${CA_EXPIRE:-3650}
+    restart: unless-stopped
+    command: ovpn_run
+
+volumes:
+  openvpn_data:
+
+networks:
+  default:
+    name: openvpn_network

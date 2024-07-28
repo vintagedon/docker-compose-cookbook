@@ -1,85 +1,117 @@
 # Pi-hole Docker Setup
 
-This project contains a Docker Compose file and environment configuration for setting up a Pi-hole instance in a Docker container. It includes configuration options for customizing your Pi-hole deployment.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-[Pi-hole](https://pi-hole.net/) is a network-wide ad blocker that acts as a DNS sinkhole and optionally a DHCP server, intended for use on a private network. It is designed to block ads and tracking domains across your entire network, improving privacy and potentially speeding up your internet browsing experience.
+Pi-hole is a network-wide ad blocker that acts as a DNS sinkhole and optionally a DHCP server, intended for use on a private network. This Docker setup allows you to quickly deploy Pi-hole in a containerized environment.
 
-## GitHub Repository
-[https://github.com/vintagedon/docker-compose-cookbook](https://github.com/vintagedon/docker-compose-cookbook)
+## Table of Contents
 
-## Prerequisites
-- Docker
-- Docker Compose
+- [Pi-hole Docker Setup](#pi-hole-docker-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Advanced Configuration](#advanced-configuration)
+  - [Data Persistence](#data-persistence)
+  - [Networking](#networking)
+  - [Security Considerations](#security-considerations)
+  - [Performance Tuning](#performance-tuning)
+  - [Multi-Node Setup](#multi-node-setup)
+  - [Upgrading](#upgrading)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Project Structure
+
 ```
 .
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+├── docs/
+│   ├── CONFIGURATION.md
+│   ├── CONTRIBUTING.md
+│   ├── MULTI_NODE_SETUP.md
+│   ├── PERFORMANCE_TUNING.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   └── UPGRADING.md
+├── scripts/
+│   └── custom.list
 ├── docker-compose.yml
-├── .env
+├── .env.example
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## Files
-- `docker-compose.yml`: Defines the Pi-hole service configuration
-- `.env`: Contains environment variables for configuring the Pi-hole instance
-- `README.md`: Provides information and instructions for the project
+## Prerequisites
+
+- Docker
+- Docker Compose
+- A dedicated IP address for Pi-hole
+
+## Quick Start
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and adjust the variables as needed
+3. Run `docker-compose up -d`
+4. Access the Pi-hole admin interface at `http://<your-pi-hole-ip>/admin`
+5. Log in using the password set in your `.env` file
+
+## Configuration
+
+See [CONFIGURATION.md](docs/CONFIGURATION.md) for detailed configuration options.
 
 ## Usage
 
-1. Edit the `.env` file and replace the placeholder values with your desired configuration. The basic configuration includes:
+After starting Pi-hole, configure your devices or router to use Pi-hole as the DNS server. Pi-hole will then start blocking ads and tracking domains network-wide.
 
-   ```
-   PIHOLE_CONTAINER_NAME=pihole
-   PIHOLE_WEB_PORT=80
-   PIHOLE_DNS_PORT=53
-   PIHOLE_DHCP_PORT=67
-   PIHOLE_CONFIG_DIR=/path/to/your/pihole/config
-   PIHOLE_TIMEZONE=America/New_York
-   PIHOLE_PASSWORD=your_secure_password
-   PIHOLE_DNS1=1.1.1.1
-   PIHOLE_DNS2=1.0.0.1
-   ```
+## Advanced Configuration
 
-2. Run the container using Docker Compose:
-   ```
-   docker-compose up -d
-   ```
-
-## Configuration
-The Docker Compose file uses environment variables from the `.env` file for configuration. Ensure all variables in the `.env` file are set before running the container.
-
-## Accessing Pi-hole
-You can access the Pi-hole web interface by navigating to `http://localhost:80` in your web browser (replace 80 with the port specified in `PIHOLE_WEB_PORT` if you changed it).
-
-To use Pi-hole as your DNS server, configure your router or individual devices to use the IP address of the machine running the Pi-hole container as the DNS server.
+For advanced setup options, including custom DNS settings and blocklists, refer to [CONFIGURATION.md](docs/CONFIGURATION.md).
 
 ## Data Persistence
-Pi-hole configuration and data are stored in the directory specified by `PIHOLE_CONFIG_DIR`. Ensure this path exists on your host system and has appropriate permissions.
 
-## Expected Results
-After running `docker-compose up -d`, you should see the Pi-hole container running. You can verify this by using the `docker ps` command. The output should look similar to this:
+Pi-hole data is persisted using Docker volumes. See [docker-compose.yml](docker-compose.yml) for volume configurations.
 
-```
-CONTAINER ID   IMAGE                  COMMAND             CREATED          STATUS          PORTS                                                                  NAMES
-1a2b3c4d5e6f   pihole/pihole:latest   "/s6-init"          10 seconds ago   Up 9 seconds    0.0.0.0:53->53/tcp, 0.0.0.0:53->53/udp, 0.0.0.0:80->80/tcp, 67/udp   pihole
-```
+## Networking
 
-This output indicates that:
-- The Pi-hole container is running
-- It's using the latest Pi-hole image
-- The container name matches what you set in `PIHOLE_CONTAINER_NAME`
-- The necessary ports (53 for DNS, 80 for web interface, and optionally 67 for DHCP) are mapped to the host
+Pi-hole requires specific port configurations. Ensure your firewall allows traffic on the necessary ports. See [CONFIGURATION.md](docs/CONFIGURATION.md) for details.
 
-If you see this output, your Pi-hole setup is running successfully and should be accessible via web interface and ready to use as a DNS server.
+## Security Considerations
 
-## Security Note
-This setup is intended for development and testing purposes. For production environments, you should implement proper security measures, including but not limited to:
-- Using HTTPS for the web interface
-- Configuring firewalls to restrict access
-- Regularly updating to the latest Pi-hole version
+Review [SECURITY.md](docs/SECURITY.md) for important security considerations when running Pi-hole.
+
+## Performance Tuning
+
+For performance optimization tips, see [PERFORMANCE_TUNING.md](docs/PERFORMANCE_TUNING.md).
+
+## Multi-Node Setup
+
+For high-availability setups, refer to [MULTI_NODE_SETUP.md](docs/MULTI_NODE_SETUP.md).
+
+## Upgrading
+
+Follow the upgrade instructions in [UPGRADING.md](docs/UPGRADING.md) to keep your Pi-hole installation up-to-date.
+
+## Troubleshooting
+
+If you encounter issues, check [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) for common problems and solutions.
 
 ## Contributing
-Please refer to the repository's contributing guidelines for information on how to contribute to this project.
+
+Contributions are welcome! Please see [CONTRIBUTING.md](docs/CONTRIBUTING.md) for details.
 
 ## License
-This repository is licensed under the MIT License. See the [LICENSE](LICENSE) file for more information.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This project is not officially associated with Pi-hole. Use at your own risk.

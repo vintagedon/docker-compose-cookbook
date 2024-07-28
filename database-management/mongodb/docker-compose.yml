@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  mongodb:
+    container_name: ${CONTAINER_NAME:-mongodb}
+    image: mongo:${MONGO_VERSION:-5.0.9}
+    ports:
+      - "${MONGO_PORT:-27017}:27017"
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? mongodb_named_data:/data/db: mongodb_data:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USERNAME}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+      - MONGO_INITDB_DATABASE=${MONGO_INITDB_DATABASE:-admin}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mongodb_data:
+  mongodb_named_data:
+    name: mongodb_named_data
+
+networks:
+  default:
+    name: mongodb_network

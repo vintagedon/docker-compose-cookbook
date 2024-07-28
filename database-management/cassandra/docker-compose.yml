@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  cassandra:
+    container_name: ${CONTAINER_NAME:-cassandra}
+    image: cassandra:${CASSANDRA_VERSION:-latest}
+    ports:
+      - "${CASSANDRA_PORT:-9042}:9042"
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? cassandra_named_data:/var/lib/cassandra: cassandra_data:/var/lib/cassandra
+    environment:
+      - CASSANDRA_CLUSTER_NAME=${CASSANDRA_CLUSTER_NAME:-MyCluster}
+      - CASSANDRA_ENDPOINT_SNITCH=${CASSANDRA_ENDPOINT_SNITCH:-SimpleSnitch}
+      - CASSANDRA_DC=${CASSANDRA_DC:-dc1}
+      - MAX_HEAP_SIZE=${MAX_HEAP_SIZE:-4G}
+      - HEAP_NEWSIZE=${HEAP_NEWSIZE:-800M}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "cqlsh", "-e", "describe keyspaces"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  cassandra_data:
+  cassandra_named_data:
+    name: cassandra_named_data
+
+networks:
+  default:
+    name: cassandra_network

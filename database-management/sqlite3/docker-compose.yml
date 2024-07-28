@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  sqlite3:
+    image: keinos/sqlite3:${SQLITE_VERSION:-latest}
+    container_name: ${CONTAINER_NAME:-sqlite3}
+    volumes:
+      - sqlite_data:/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - SQLITE_DATABASE=${SQLITE_DATABASE:-db.sqlite}
+    command:
+      [
+        "/bin/sh",
+        "-c",
+        "sqlite3 /data/${SQLITE_DATABASE:-db.sqlite} < /docker-entrypoint-initdb.d/init.sql && tail -f /dev/null",
+      ]
+    healthcheck:
+      test:
+        ["CMD-SHELL", "sqlite3 /data/${SQLITE_DATABASE:-db.sqlite} 'SELECT 1;'"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+    restart: unless-stopped
+
+volumes:
+  sqlite_data:
+
+networks:
+  default:
+    name: sqlite3_network

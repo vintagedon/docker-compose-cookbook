@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  gitea:
+    image: gitea/gitea:${GITEA_VERSION:-latest}
+    container_name: ${CONTAINER_NAME:-gitea}
+    environment:
+      - USER_UID=${USER_UID:-1000}
+      - USER_GID=${USER_GID:-1000}
+      - GITEA__database__DB_TYPE=sqlite3
+      - GITEA__database__PATH=/data/gitea/gitea.db
+      - GITEA__server__ROOT_URL=${GITEA_ROOT_URL:-http://localhost:3000/}
+      - GITEA__server__HTTP_PORT=${GITEA_HTTP_PORT:-3000}
+      - GITEA__server__SSH_PORT=${GITEA_SSH_PORT:-22}
+    volumes:
+      - gitea_data:/data
+      - gitea_config:/etc/gitea
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "${GITEA_HTTP_PORT:-3000}:3000"
+      - "${GITEA_SSH_PORT:-22}:22"
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "/usr/sbin/gitea", "health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  gitea_data:
+  gitea_config:
+
+networks:
+  default:
+    name: gitea_network

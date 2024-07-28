@@ -1,0 +1,21 @@
+# Redis initialization script
+
+# Set some sample data
+SET welcome_message "Welcome to Redis!"
+SET app_name "My Redis App"
+
+# Create a hash
+HSET user:1000 username "johndoe" email "johndoe@example.com" active 1
+
+# Create a list
+RPUSH todos "Buy groceries" "Write code" "Take a break"
+
+# Create a set
+SADD fruits "apple" "banana" "cherry" "date"
+
+# Create a sorted set
+ZADD leaderboard 100 "player1" 75 "player2" 150 "player3"
+
+# Print a message to confirm script execution
+SELECT 0
+SET init_script_run "true"

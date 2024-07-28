@@ -1,0 +1,50 @@
+version: "3.8"
+
+services:
+  gitea:
+    image: gitea/gitea:${GITEA_VERSION:-latest}
+    container_name: ${GITEA_CONTAINER_NAME:-gitea}
+    environment:
+      - USER_UID=${USER_UID:-1000}
+      - USER_GID=${USER_GID:-1000}
+      - DB_TYPE=mysql
+      - DB_HOST=mysql:3306
+      - DB_NAME=${MYSQL_DATABASE}
+      - DB_USER=${MYSQL_USER}
+      - DB_PASSWD=${MYSQL_PASSWORD}
+      - ROOT_URL=${GITEA_ROOT_URL:-http://localhost:3000}
+    restart: always
+    networks:
+      - gitea
+    volumes:
+      - gitea_data:/data
+      - /etc/timezone:/etc/timezone:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "${GITEA_HTTP_PORT:-3000}:3000"
+      - "${GITEA_SSH_PORT:-2222}:22"
+    depends_on:
+      - mysql
+
+  mysql:
+    image: mysql:${MYSQL_VERSION:-8}
+    container_name: ${MYSQL_CONTAINER_NAME:-gitea-mysql}
+    restart: always
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    networks:
+      - gitea
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./scripts/init-mysql.sql:/docker-entrypoint-initdb.d/init-mysql.sql
+
+networks:
+  gitea:
+    driver: bridge
+
+volumes:
+  gitea_data:
+  mysql_data:

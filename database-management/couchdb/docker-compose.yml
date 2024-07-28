@@ -1,0 +1,30 @@
+version: "3.8"
+
+services:
+  couchdb:
+    container_name: ${CONTAINER_NAME:-couchdb}
+    image: couchdb:${COUCHDB_VERSION:-latest}
+    ports:
+      - "${PORT:-5984}:5984"
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? couchdb_named_data:/opt/couchdb/data: couchdb_data:/opt/couchdb/data
+    environment:
+      - COUCHDB_USER=${COUCHDB_USER}
+      - COUCHDB_PASSWORD=${COUCHDB_PASSWORD}
+      - COUCHDB_SECRET=${COUCHDB_SECRET}
+      - COUCHDB_ERLANG_COOKIE=${COUCHDB_ERLANG_COOKIE}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:5984/_up"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  couchdb_data:
+  couchdb_named_data:
+    name: couchdb_named_data
+
+networks:
+  default:
+    name: couchdb_network

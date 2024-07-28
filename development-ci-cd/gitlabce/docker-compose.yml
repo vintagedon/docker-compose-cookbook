@@ -1,0 +1,36 @@
+version: "3.7"
+
+services:
+  gitlab:
+    image: gitlab/gitlab-ce:${GITLAB_VERSION:-latest}
+    container_name: ${CONTAINER_NAME:-gitlab}
+    restart: unless-stopped
+    hostname: ${GITLAB_HOSTNAME:-localhost}
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url '${GITLAB_EXTERNAL_URL:-http://localhost:8080}'
+        gitlab_rails['gitlab_shell_ssh_port'] = ${SSH_PORT:-2222}
+    ports:
+      - "${HTTP_PORT:-8080}:80"
+      - "${HTTPS_PORT:-8443}:443"
+      - "${SSH_PORT:-2222}:22"
+    volumes:
+      - gitlab_config:/etc/gitlab
+      - gitlab_logs:/var/log/gitlab
+      - gitlab_data:/var/opt/gitlab
+    shm_size: "256m"
+    healthcheck:
+      test: ["CMD", "/opt/gitlab/bin/gitlab-healthcheck", "--fail-on-all"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 300s
+
+volumes:
+  gitlab_config:
+  gitlab_logs:
+  gitlab_data:
+
+networks:
+  default:
+    name: gitlab_network

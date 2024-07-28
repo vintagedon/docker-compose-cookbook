@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  pihole:
+    container_name: pihole
+    image: pihole/pihole:${PIHOLE_VERSION:-latest}
+    ports:
+      - "${PIHOLE_WEB_PORT:-80}:80/tcp"
+      - "${PIHOLE_DNS_PORT:-53}:53/tcp"
+      - "${PIHOLE_DNS_PORT:-53}:53/udp"
+      - "${PIHOLE_DHCP_PORT:-67}:67/udp" # Only required if using Pi-hole as your DHCP server
+    environment:
+      TZ: ${TIMEZONE:-UTC}
+      WEBPASSWORD: ${WEBPASSWORD:-password}
+      FTLCONF_LOCAL_IPV4: ${SERVER_IP}
+      ServerIP: ${SERVER_IP}
+      DNS1: ${UPSTREAM_DNS_1:-1.1.1.1}
+      DNS2: ${UPSTREAM_DNS_2:-1.0.0.1}
+      DNSMASQ_LISTENING: ${DNSMASQ_LISTENING:-local}
+      PIHOLE_DNS_: ${PIHOLE_DNS:-unbound}
+    volumes:
+      - ./etc-pihole:/etc/pihole
+      - ./etc-dnsmasq.d:/etc/dnsmasq.d
+      - ./scripts/custom.list:/etc/pihole/custom.list:ro
+    cap_add:
+      - NET_ADMIN # Required if using Pi-hole as your DHCP server
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "dig", "@127.0.0.1", "-p53", "pi.hole"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  etc-pihole:
+  etc-dnsmasq.d:
+
+networks:
+  default:
+    name: pihole_network

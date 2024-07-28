@@ -1,0 +1,29 @@
+version: "3.8"
+
+services:
+  adguardhome:
+    image: adguard/adguardhome:${ADGUARD_VERSION:-latest}
+    container_name: ${CONTAINER_NAME:-adguardhome}
+    ports:
+      - "${ADGUARD_UI_PORT:-3000}:3000"
+      - "${ADGUARD_DNS_PORT:-53}:53/tcp"
+      - "${ADGUARD_DNS_PORT:-53}:53/udp"
+    volumes:
+      - adguardhome_work:/opt/adguardhome/work
+      - adguardhome_conf:/opt/adguardhome/conf
+    environment:
+      - TZ=${TIMEZONE:-UTC}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  adguardhome_work:
+  adguardhome_conf:
+
+networks:
+  default:
+    name: adguardhome_network

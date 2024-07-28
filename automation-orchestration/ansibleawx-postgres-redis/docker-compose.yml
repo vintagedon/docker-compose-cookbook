@@ -1,0 +1,63 @@
+version: "3"
+
+services:
+  web:
+    image: ansible/awx:${AWX_VERSION:-latest}
+    container_name: ${CONTAINER_NAME_PREFIX:-awx}_web
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "${AWX_WEB_PORT:-8080}:8052"
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-awx}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-awxpass}
+      - POSTGRES_DB=${POSTGRES_DB:-awx}
+      - SECRET_KEY=${SECRET_KEY:-awxsecret}
+      - AWX_ADMIN_USER=${AWX_ADMIN_USER:-admin}
+      - AWX_ADMIN_PASSWORD=${AWX_ADMIN_PASSWORD:-password}
+    volumes:
+      - awx_projects:/var/lib/awx/projects
+    restart: unless-stopped
+
+  task:
+    image: ansible/awx:${AWX_VERSION:-latest}
+    container_name: ${CONTAINER_NAME_PREFIX:-awx}_task
+    depends_on:
+      - postgres
+      - redis
+      - web
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-awx}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-awxpass}
+      - POSTGRES_DB=${POSTGRES_DB:-awx}
+      - SECRET_KEY=${SECRET_KEY:-awxsecret}
+      - AWX_ADMIN_USER=${AWX_ADMIN_USER:-admin}
+      - AWX_ADMIN_PASSWORD=${AWX_ADMIN_PASSWORD:-password}
+    volumes:
+      - awx_projects:/var/lib/awx/projects
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:13
+    container_name: ${CONTAINER_NAME_PREFIX:-awx}_postgres
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-awx}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-awxpass}
+      - POSTGRES_DB=${POSTGRES_DB:-awx}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  redis:
+    image: redis:6
+    container_name: ${CONTAINER_NAME_PREFIX:-awx}_redis
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+  awx_projects:
+
+networks:
+  default:
+    name: awx_network

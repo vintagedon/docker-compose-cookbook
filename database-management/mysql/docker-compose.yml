@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  mysql:
+    container_name: ${CONTAINER_NAME:-mysql}
+    image: mysql:latest
+    ports:
+      - "${PORT:-3306}:3306"
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? mysql_named_data:/var/lib/mysql: mysql_data:/var/lib/mysql
+      - ./config:/etc/mysql/conf.d
+    environment:
+      - MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
+      - MYSQL_DATABASE=${MYSQL_DATABASE}
+      - MYSQL_USER=${MYSQL_USER}
+      - MYSQL_PASSWORD=${MYSQL_PASSWORD}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+volumes:
+  mysql_data:
+  mysql_named_data:
+    name: mysql_named_data
+
+networks:
+  default:
+    name: mysql_network

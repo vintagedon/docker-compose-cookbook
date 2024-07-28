@@ -1,128 +1,118 @@
 # Ansible AWX Docker Setup
 
-This project contains a Docker Compose setup for Ansible AWX, including PostgreSQL and Redis, with basic and advanced configuration options.
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Ansible AWX is the open-source version of Ansible Tower, a web-based solution that makes Ansible even more easy to use for IT teams of all kinds. It provides a user interface, REST API, and task engine for Ansible.
+Ansible AWX is the open-source version of Ansible Tower, a web-based solution that makes Ansible even more easy to use for IT teams of all kinds. It's designed to be the hub for all of your automation tasks.
 
-**Disclaimer:** This setup is based on general best practices and may not reflect the most current configuration options or requirements for Ansible AWX. Always refer to the [official Ansible AWX documentation](https://github.com/ansible/awx/blob/devel/INSTALL.md) for the most up-to-date and accurate information.
+## Table of Contents
 
-## GitHub Repository
-
-https://github.com/vintagedon/docker-compose-cookbook/automation-orchestration/ansibleawx-postgres-redis
-
-## Prerequisites
-
-- Docker
-- Docker Compose
-- At least 4GB of RAM
-- At least 2 CPU cores
-- At least 20GB of free disk space
+- [Ansible AWX Docker Setup](#ansible-awx-docker-setup)
+  - [Table of Contents](#table-of-contents)
+  - [Project Structure](#project-structure)
+  - [Prerequisites](#prerequisites)
+  - [Quick Start](#quick-start)
+  - [Configuration](#configuration)
+  - [Usage](#usage)
+  - [Advanced Configuration](#advanced-configuration)
+  - [Data Persistence](#data-persistence)
+  - [Networking](#networking)
+  - [Security Considerations](#security-considerations)
+  - [Performance Tuning](#performance-tuning)
+  - [Multi-Node Setup](#multi-node-setup)
+  - [Upgrading](#upgrading)
+  - [Troubleshooting](#troubleshooting)
+  - [Contributing](#contributing)
+  - [License](#license)
+  - [Disclaimer](#disclaimer)
 
 ## Project Structure
 
 ```
 .
+├── .github/
+│   └── ISSUE_TEMPLATE/
+│       ├── bug_report.md
+│       └── feature_request.md
+├── docs/
+│   ├── CONFIGURATION.md
+│   ├── CONTRIBUTING.md
+│   ├── MULTI_NODE_SETUP.md
+│   ├── PERFORMANCE_TUNING.md
+│   ├── SECURITY.md
+│   ├── TROUBLESHOOTING.md
+│   └── UPGRADING.md
+├── scripts/
+│   └── init.sh
 ├── docker-compose.yml
-├── .env
+├── .env.example
+├── .gitignore
+├── LICENSE
 └── README.md
 ```
 
-## Files
-- `docker-compose.yml`: Ansible AWX, PostgreSQL, and Redis service configuration
-- `.env`: Environment variables for the setup configuration
-- `README.md`: Project information and instructions
+## Prerequisites
+
+- Docker
+- Docker Compose
+- At least 4GB of free memory
+- At least 20GB of free disk space
+
+## Quick Start
+
+1. Clone this repository
+2. Copy `.env.example` to `.env` and adjust the variables as needed
+3. Run `docker-compose up -d`
+4. Access Ansible AWX at http://localhost:8080
+5. Log in using the default credentials (admin/password) and change the password immediately
+
+## Configuration
+
+Ansible AWX can be configured using environment variables in the `.env` file. For detailed configuration options, refer to the [CONFIGURATION.md](docs/CONFIGURATION.md) file.
 
 ## Usage
 
-1. Edit the `.env` file with your desired configuration.
-2. Run the containers:
+After starting the containers, you can access the Ansible AWX web interface and start creating inventories, projects, and job templates. For more information on how to use Ansible AWX, refer to the [official Ansible AWX documentation](https://docs.ansible.com/ansible-tower/).
 
-```bash
-docker-compose up -d
-```
+## Advanced Configuration
 
-3. Access Ansible AWX at http://localhost:80 (or the port you specified in the .env file).
-
-4. Check the logs to ensure all services are running correctly:
-
-```bash
-docker-compose logs
-```
-
-You should see output similar to:
-
-```
-ansibleawx_1   | Operations to perform:
-ansibleawx_1   |   Apply all migrations: auth, conf, contenttypes, django_celery_results, main, oauth2_provider, sessions, sites, social_django, sso, taggit
-ansibleawx_1   | Running migrations:
-...
-ansibleawx_1   | Starting uwsgi with command: /usr/local/bin/uwsgi --socket 0.0.0.0:8050 --module awx.wsgi:application --vacuum --processes 5 --harakiri 120 --no-orphans --master --max-requests 1000 --master-fifo /var/lib/awx/awxfifo --lazy-apps -b 32768
-postgres_1     | PostgreSQL init process complete; ready for start up.
-redis_1        | 1:M 27 Jul 2024 12:00:00.000 # Server initialized
-```
-
-## Expected Output
-
-When the setup is running correctly, you should see:
-
-1. The Ansible AWX web interface is accessible at http://localhost:80 (or your specified port).
-2. You can log in with the default credentials (unless changed in the .env file).
-3. The AWX interface loads without errors and you can navigate through different sections.
-4. The output of `docker ps` should show the containers running. For example:
-
-   ```
-   $ docker ps
-   CONTAINER ID   IMAGE                COMMAND                  CREATED          STATUS          PORTS                                   NAMES
-   abc123def456   ansible/awx:latest   "/usr/bin/tini -- /u…"   10 minutes ago   Up 10 minutes   0.0.0.0:80->8052/tcp                    ansibleawx-postgres-redis_ansibleawx_1
-   def456ghi789   postgres:12          "docker-entrypoint.s…"   10 minutes ago   Up 10 minutes   5432/tcp                                ansibleawx-postgres-redis_postgres_1
-   ghi789jkl012   redis:6              "docker-entrypoint.s…"   10 minutes ago   Up 10 minutes   6379/tcp                                ansibleawx-postgres-redis_redis_1
-   ```
-
-## Configuration Options
-
-### Basic Options
-- `POSTGRES_DATA_DIR`: Directory to store PostgreSQL data
-- `AWX_ADMIN_USER`: Admin username for AWX
-- `AWX_ADMIN_PASSWORD`: Admin password for AWX
-
-### Common Options
-- `AWX_HOST_PORT`: The port to access AWX on the host machine
-- `POSTGRES_PASSWORD`: Password for the PostgreSQL database
-- `AWX_SECRET_KEY`: Secret key for AWX
-
-### Advanced Options
-- `AWX_REPLICAS`: Number of AWX task replicas to run
-- `AWX_TASK_TIMEOUT`: Timeout for AWX tasks in seconds
-
-Usage:
-1. Uncomment relevant lines in the `.env` file.
-2. Set desired values.
-3. Restart the containers:
-```bash
-docker-compose down && docker-compose up -d
-```
+For advanced configuration options, including setting up external databases, configuring LDAP authentication, and more, refer to the [CONFIGURATION.md](docs/CONFIGURATION.md) file.
 
 ## Data Persistence
-Ansible AWX data is stored in the PostgreSQL database. The database files are persisted in the directory specified by `POSTGRES_DATA_DIR` in the .env file.
 
-## Security Note
-- Change the default admin password immediately after first login.
-- Use strong, unique passwords for the admin user and PostgreSQL database.
-- Consider using a reverse proxy with HTTPS for production deployments.
-- Regularly update the Ansible AWX, PostgreSQL, and Redis images to get the latest security patches.
+Ansible AWX data is stored in Docker volumes to ensure persistence across container restarts. For more information on managing data, refer to the [Data Persistence](#data-persistence) section in this README.
+
+## Networking
+
+By default, Ansible AWX is accessible on port 8080. You can modify this in the `docker-compose.yml` file if needed. For more complex networking setups, refer to the [Networking](#networking) section in this README.
+
+## Security Considerations
+
+Security is crucial for Ansible AWX. Make sure to change default passwords, use HTTPS, and follow best practices for securing your installation. For more information, refer to the [SECURITY.md](docs/SECURITY.md) file.
+
+## Performance Tuning
+
+For tips on optimizing Ansible AWX performance, including memory allocation and database tuning, refer to the [PERFORMANCE_TUNING.md](docs/PERFORMANCE_TUNING.md) file.
+
+## Multi-Node Setup
+
+For information on setting up Ansible AWX in a multi-node configuration for high availability and scalability, refer to the [MULTI_NODE_SETUP.md](docs/MULTI_NODE_SETUP.md) file.
+
+## Upgrading
+
+For instructions on upgrading your Ansible AWX installation, refer to the [UPGRADING.md](docs/UPGRADING.md) file.
 
 ## Troubleshooting
-Check logs: `docker-compose logs`
 
-Common issues:
-1. Database connection issues: Ensure the PostgreSQL container is running and the password is correct.
-2. Web interface not accessible: Check if the correct port is exposed and not in use by another service.
-3. Out of memory errors: Ensure your system meets the minimum RAM requirements (4GB).
-
-For more detailed troubleshooting, please refer to the [official Ansible AWX documentation](https://github.com/ansible/awx/blob/devel/INSTALL.md).
+If you encounter any issues, check the [TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) file for common problems and their solutions.
 
 ## Contributing
-Feel free to submit issues, fork the repository and send pull requests!
+
+We welcome contributions! Please see the [CONTRIBUTING.md](docs/CONTRIBUTING.md) file for details on how to contribute to this project.
 
 ## License
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## Disclaimer
+
+This is an unofficial Docker setup for Ansible AWX. For official installation methods, please refer to the [Ansible AWX documentation](https://github.com/ansible/awx/blob/devel/INSTALL.md).

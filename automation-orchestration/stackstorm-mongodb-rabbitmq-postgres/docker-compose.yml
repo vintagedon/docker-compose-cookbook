@@ -1,0 +1,65 @@
+version: "3.8"
+
+services:
+  stackstorm:
+    container_name: ${CONTAINER_NAME:-stackstorm}
+    image: stackstorm/stackstorm:${ST2_VERSION:-latest}
+    env_file: .env
+    ports:
+      - "${ST2_WEB_PORT:-8080}:8080"
+      - "${ST2_API_PORT:-9101}:9101"
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? stackstorm_config:/etc/st2: stackstorm_config:/etc/st2
+      - ${USE_NAMED_VOLUMES:-false} == true ? stackstorm_packs:/opt/stackstorm/packs: stackstorm_packs:/opt/stackstorm/packs
+      - ${USE_NAMED_VOLUMES:-false} == true ? stackstorm_logs:/var/log/st2: stackstorm_logs:/var/log/st2
+    environment:
+      - ST2_AUTH_URL=http://stackstorm:9100/
+      - ST2_API_URL=http://stackstorm:9101/
+      - ST2_STREAM_URL=http://stackstorm:9102/
+    depends_on:
+      - mongodb
+      - rabbitmq
+      - postgres
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "st2ctl", "status"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  mongodb:
+    image: mongo:${MONGO_VERSION:-4.4}
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? mongo_data:/data/db: mongo_data:/data/db
+    restart: unless-stopped
+
+  rabbitmq:
+    image: rabbitmq:${RABBITMQ_VERSION:-3-management}
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? rabbitmq_data:/var/lib/rabbitmq: rabbitmq_data:/var/lib/rabbitmq
+    environment:
+      - RABBITMQ_DEFAULT_USER=${RABBITMQ_USER:-stackstorm}
+      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD:-password}
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-13}
+    volumes:
+      - ${USE_NAMED_VOLUMES:-false} == true ? postgres_data:/var/lib/postgresql/data: postgres_data:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-stackstorm}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-password}
+      - POSTGRES_DB=${POSTGRES_DB:-mistral}
+    restart: unless-stopped
+
+volumes:
+  stackstorm_config:
+  stackstorm_packs:
+  stackstorm_logs:
+  mongo_data:
+  rabbitmq_data:
+  postgres_data:
+
+networks:
+  default:
+    name: stackstorm_network

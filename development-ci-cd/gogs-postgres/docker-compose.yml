@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  gogs:
+    image: gogs/gogs:${GOGS_VERSION:-latest}
+    container_name: ${GOGS_CONTAINER_NAME:-gogs}
+    ports:
+      - "${GOGS_HTTP_PORT:-3000}:3000"
+      - "${GOGS_SSH_PORT:-22}:22"
+    volumes:
+      - gogs_data:/data
+    environment:
+      - PGHOST=postgres
+      - PGPORT=5432
+      - PGDATABASE=${POSTGRES_DB:-gogs}
+      - PGUSER=${POSTGRES_USER:-gogs}
+      - PGPASSWORD=${POSTGRES_PASSWORD}
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:${POSTGRES_VERSION:-13-alpine}
+    container_name: ${POSTGRES_CONTAINER_NAME:-gogs-postgres}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./scripts/init.sql:/docker-entrypoint-initdb.d/init.sql
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-gogs}
+      - POSTGRES_USER=${POSTGRES_USER:-gogs}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    restart: unless-stopped
+
+volumes:
+  gogs_data:
+  postgres_data:
+
+networks:
+  default:
+    name: gogs_network

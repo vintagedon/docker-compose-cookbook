@@ -1,0 +1,58 @@
+# Jenkins with SQLite3 .gitignore
+
+# Ignore Jenkins workspace
+workspace/
+
+# Ignore Jenkins build directories
+builds/
+
+# Ignore Jenkins plugins
+plugins/
+
+# Ignore Jenkins configuration files that may contain sensitive information
+secrets/
+users/
+
+# Ignore SQLite database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Ignore environment file
+.env
+
+# Ignore logs
+*.log
+
+# Ignore temporary files
+*.tmp
+*.temp
+
+# Ignore Docker volumes
+docker_volumes/
+
+# Ignore system files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE and editor files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Ignore compiled files
+*.class
+*.jar
+*.war
+
+# Ignore package files
+*.zip
+*.tar.gz
+*.rar
+
+# Ignore node modules if using any Node.js based plugins
+node_modules/
+
+# Ignore any local configuration files
+*.local

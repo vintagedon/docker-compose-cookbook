@@ -1,0 +1,61 @@
+# OpenVPN specific
+*.key
+*.crt
+*.pem
+*.p12
+*.ovpn
+
+# Docker
+.env
+
+# Operating System Files
+.DS_Store
+Thumbs.db
+
+# Editor Files
+*.swp
+*.swo
+*~
+
+# Log Files
+*.log
+
+# Temporary Files
+*.tmp
+*.bak
+
+# Build output
+/build
+/dist
+
+# Node modules (if using Node.js for any scripts)
+node_modules/
+
+# Python virtual environment (if using Python for any scripts)
+venv/
+*.pyc
+__pycache__/
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-workspace
+
+# Ignore local configuration files
+config.local.yml
+
+# Ignore all JSON files (often used for temporary data storage)
+*.json
+
+# Ignore archive files
+*.zip
+*.tar.gz
+*.rar
+
+# Ignore database files
+*.db
+*.sqlite
+
+# Ignore OS generated files
+ehthumbs.db
+Icon?

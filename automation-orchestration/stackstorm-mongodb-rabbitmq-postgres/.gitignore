@@ -1,0 +1,22 @@
+# Environment variables
+.env
+
+# Docker volumes
+data/
+
+# Logs
+*.log
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea/
+*.swp
+*.swo
+*~
+
+# StackStorm specific
+packs/
+virtualenvs/
